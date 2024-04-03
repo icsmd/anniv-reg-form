@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Front;
 
 
-use app\Http\Controllers\Controller;
-use app\Services\RegistrationService;
-use app\Libraries\HttpResponseHandlerLibrary as Response;
+use App\Http\Controllers\Controller;
+use App\Services\RegistrationService;
+use App\Libraries\HttpResponseHandlerLibrary as Response;
 use Symfony\Component\HttpFoundation\Response as HttpCode;
 
 class RegistrationFrontController extends Controller

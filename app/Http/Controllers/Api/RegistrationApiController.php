@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
-use app\Http\Controllers\Controller;
-use app\Libraries\HttpResponseHandlerLibrary as Response;
-use app\Models\RegistrationModel;
-use app\Repositories\RegistrationRepository;
+use App\Http\Controllers\Controller;
+use App\Libraries\HttpResponseHandlerLibrary as Response;
+use App\Models\RegistrationModel;
+use App\Repositories\RegistrationRepository;
 
 class RegistrationApiController extends Controller
 {

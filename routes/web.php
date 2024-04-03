@@ -1,9 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\front\AuthFrontController;
-use App\Http\Controllers\front\RegistrationFrontController;
+use App\Http\Controllers\Front\AuthFrontController;
+use App\Http\Controllers\Front\RegistrationFrontController;
 
 /*
 |--------------------------------------------------------------------------
