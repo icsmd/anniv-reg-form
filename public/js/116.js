@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunk=self.webpackChunk||[]).push([[116],{116:(e,u,n)=>{n.r(u),n.d(u,{default:()=>d});var t=n(821),a={id:"main"};const r={mounted:function(){},methods:{}};const d=(0,n(744).Z)(r,[["render",function(e,u,n,r,d,i){var o=(0,t.up)("C_Layout_Header"),s=(0,t.up)("C_Layout_Sidebar");return(0,t.wg)(),(0,t.iD)("div",a,[(0,t.Wm)(o),(0,t.Wm)(s)])}]])}}]);
