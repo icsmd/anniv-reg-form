@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\front;
+namespace App\Http\Controllers\Front;
 
 
-use App\Http\Controllers\Controller;
-use App\Services\AuthService;
-use App\Libraries\HttpResponseHandlerLibrary as Response;
-use App\Libraries\SessionHelperLibrary as Session;
+use app\Http\Controllers\Controller;
+use app\Services\AuthService;
+use app\Libraries\HttpResponseHandlerLibrary as Response;
+use app\Libraries\SessionHelperLibrary as Session;
 
 class AuthFrontController extends Controller
 {

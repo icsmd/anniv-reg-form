@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\api;
+namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use App\Libraries\HttpResponseHandlerLibrary as Response;
-use App\Models\RegistrationModel;
-use App\Repositories\RegistrationRepository;
+use app\Http\Controllers\Controller;
+use app\Libraries\HttpResponseHandlerLibrary as Response;
+use app\Models\RegistrationModel;
+use app\Repositories\RegistrationRepository;
 
 class RegistrationApiController extends Controller
 {
