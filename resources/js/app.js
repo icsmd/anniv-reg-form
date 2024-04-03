@@ -1,36 +1,77 @@
-
+// Import Vue and Vue Router Modules
 import { createApp } from 'vue'
 import { createRouter, createWebHistory } from 'vue-router'
-// 1. Define route components.
-// These can be imported from other files
-import C_Layout_Sidebar from './components/layouts/sidebar.vue'
+import HttpRequest from './libraries/request.js'
+
+// Import Layout Components
 import C_Layout_Header from './components/layouts/header.vue'
+import C_Layout_SYSA_Sidebar from './components/layouts/sysa/sysa_sidebar.vue'
 
+import C_SYSA_SYS_MGT_SETUP_TAX_CLASS from './components/pages/sysa/sys-mgt/sys-setup-tax-class.vue'
+import C_SYSA_SYS_MGT_SETUP_TAX_CODE from './components/pages/sysa/sys-mgt/sys-setup-tax-code.vue'
+
+import C_WebDevInProgress from './components/pages/WebDevInProgress.vue'
+
+// Define route components (import components).
 const C_Login = import('./components/pages/login.vue')
+const C_404 = import('./components/pages/utilities/404.vue')
+const C_PUBLIC_Registration = import('./components/pages/public/registration.vue')
 
-const C_SDOR_dashboard = import('./components/pages/sdor/sdor_dashboard.vue')
+// SYSTEM ADMINISTRATOR
+const C_SYSA_dashboard = import('./components/pages/sysa/sysa_dashboard.vue')
+const C_SYSA_SYS_MGT_ACC_MGT = import('./components/pages/sysa/sys-mgt/acc-mgt.vue')
+const C_SYSA_SYS_MGT_SETUP_OFFICE = import('./components/pages/sysa/sys-mgt/sys-setup-office.vue')
+const C_SYSA_SYS_MGT_SETUP_UACS = import('./components/pages/sysa/sys-mgt/sys-setup-uacs.vue')
+const C_SYSA_SYS_MGT_SETUP_TAX = import('./components/pages/sysa/sys-mgt/sys-setup-tax.vue')
+const C_SYSA_SYS_MGT_USER_LOGS = import('./components/pages/sysa/sys-mgt/sys-logs.vue')
+const C_SYSA_SYS_MISC_HELP_DESK = import('./components/pages/sysa/misc/help-desk.vue')
 
-// 2. Define some routes
-// Each route should map to a component.
-// We'll talk about nested routes later.
+// REPORTS - PRINTABLES
+const P_GEN_report_print_liquidation = import('./components/printable/printable_report_liquidation.vue')
+
+// Define route paths
 const routes = [
   { path: '/', component: () => C_Login },
-  { path: '/home', component: () => C_SDOR_dashboard },
-
+  { path: '/public/registration', component: () => C_PUBLIC_Registration },
+  {
+    path: '/front/404', component: () => C_404
+  },
+  {
+    path: '/front/sysa',
+    children: [
+      { path: 'home', component: () => C_SYSA_dashboard },
+      { path: 'mgt/acc-mgt', component: () => C_SYSA_SYS_MGT_ACC_MGT },
+      { path: 'mgt/setup/office', component: () => C_SYSA_SYS_MGT_SETUP_OFFICE },
+      { path: 'mgt/setup/uacs', component: () => C_SYSA_SYS_MGT_SETUP_UACS },
+      { path: 'mgt/setup/tax', component: () => C_SYSA_SYS_MGT_SETUP_TAX },
+      { path: 'mgt/user-logs', component: () => C_SYSA_SYS_MGT_USER_LOGS },
+      { path: 'misc/help-desk', component: () => C_SYSA_SYS_MISC_HELP_DESK },
+    ]
+  }
 ]
 
-// 3. Create the router instance and pass the `routes` option
-// You can pass in additional options here, but let's
-// keep it simple for now.
+// Create the vue router instance
 const router = createRouter({
-  // 4. Provide the history implementation to use. We are using the hash history for simplicity here.
   history: createWebHistory(process.env.BASE_URL),
   routes, // short for `routes: routes`
 })
 
-// 5. Create and mount the root instance.
+// Create the app and mount the root instance.
 const app = createApp({
+  mixins: [
+    HttpRequest
+  ],
+  data() {
+    return {
+      aUserInfo: [],
+      sUserType: this.getUserType()
+    }
+  },
+  created() {
+    // this.getUserInfo();
+  },
   methods: {
+    // Method for initializing template plugin
     initializeTemplatePlugins: function () {
       jQuery(document).ready(function () {
 
@@ -333,14 +374,69 @@ const app = createApp({
         }
 
       });
-    }
+    },
+    
+    getUserInfo: function () {
+      this.getRequest('user/session', (mResponse) => {
+        this.aUserInfo = mResponse.data;
+      });
+    },
+
+    getUserType: function () {
+      return atob(this.getLocalStorageValue('amho'));
+    },
+
+    getLocalStorageValue: function (key) {
+      return localStorage.getItem(key);
+    },
+
+    // Create or update a value in Local Storage
+    setLocalStorageValue: function (key, value) {
+      localStorage.setItem(key, value);
+    },
+
+    deleteLocalStorageValue: function (key) {
+      localStorage.removeItem(key);
+    },
+
+    clearLocalStorage: function () {
+      localStorage.clear();
+    },
+
+    initLibraries: function () {
+      let aUrl = {
+        sdor: 'cache/init-sdor-lib',
+        actg: 'cache/init-actg-lib',
+        bdgt: 'cache/init-bdgt-lib',
+        cash: 'cache/init-cash-lib',
+      }
+      this.getRequest(aUrl[this.sUserType], (mResponse) => {
+        this.setLocalStorageValue('lib', mResponse.data);
+      });
+    },
+
+    parseLocalStorageLib: function () {
+      let sLibData = this.getLocalStorageValue('lib');
+      // if (sLibData === null) {
+      //   this.initLibraries();
+      // }
+      return JSON.parse(atob(sLibData));
+    },
+
+
   }
 })
-// Make sure to _use_ the router instance to make the
-// whole app router-aware.
 
+// Register components that are not included in the vue router
 app
-  .component('C_Layout_Sidebar', C_Layout_Sidebar)
   .component('C_Layout_Header', C_Layout_Header)
+  .component('C_Layout_SYSA_Sidebar', C_Layout_SYSA_Sidebar)
+  .component('C_SYSA_SYS_MGT_SETUP_TAX_CLASS', C_SYSA_SYS_MGT_SETUP_TAX_CLASS)
+  .component('C_SYSA_SYS_MGT_SETUP_TAX_CODE', C_SYSA_SYS_MGT_SETUP_TAX_CODE)
+  .component('C_WebDevInProgress', C_WebDevInProgress)
+
+// Use the router instance
 app.use(router)
+
+// Mount the app instance in the HTML 
 app.mount('#app')

@@ -59,6 +59,12 @@ return [
 
     'asset_url' => env('ASSET_URL'),
 
+    /**
+     * API CONFIG
+     */
+    'api_url' => env('API_URL', 'http://localhost'),
+    'api_version' => env('API_VERSION', 'v1'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Timezone
@@ -70,7 +76,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => env('APP_TIMEZONE', 'Asia/Manila'),
 
     /*
     |--------------------------------------------------------------------------
