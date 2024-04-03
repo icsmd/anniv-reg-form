@@ -26,5 +26,15 @@ class RegistrationFrontController extends Controller
             return Response::formatErrorResponse($oException);
         }
     }
+
+    public function saveRegistration()
+    {
+        try {
+
+        } catch (\Throwable $oException) {
+            
+        }
+    }
+
 }
 
