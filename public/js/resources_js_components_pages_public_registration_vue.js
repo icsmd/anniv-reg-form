@@ -32,7 +32,7 @@ __webpack_require__.r(__webpack_exports__);
       sInpIdCode: '#inp_idcode',
       bEmailValid: false,
       bFormValid: false,
-      bFormSubmitted: true,
+      bFormSubmitted: false,
       sConvertedImage: '',
       aSubmitResult: []
     };

@@ -259,7 +259,7 @@ export default {
       sInpIdCode: '#inp_idcode',
       bEmailValid: false,
       bFormValid: false,
-      bFormSubmitted: true,
+      bFormSubmitted: false,
       sConvertedImage: '',
       aSubmitResult: [],
     }
