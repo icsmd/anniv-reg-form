@@ -23,14 +23,17 @@ Route::get('public/{any?}', function () {
 })->where('any', '.*');
 
 Route::get('get-mst', [RegistrationFrontController::class, 'getMembershipTypes']);
+Route::post('validate-email', [RegistrationFrontController::class, 'validateEmail']);
+Route::post('submit-form', [RegistrationFrontController::class, 'saveRegistration']);
 
-Route::post('auth/log-in', [AuthFrontController::class, 'login']);
-Route::post('auth/log-out', [AuthFrontController::class, 'logout']);
+
+// Route::post('auth/log-in', [AuthFrontController::class, 'login']);
+// Route::post('auth/log-out', [AuthFrontController::class, 'logout']);
 
 // Route::middleware(['session.check'])->group(function () {
-    Route::prefix('user')->group(function () {
-        Route::get('session', [AuthFrontController::class, 'getUserSession']);
-    });
+    // Route::prefix('user')->group(function () {
+    //     Route::get('session', [AuthFrontController::class, 'getUserSession']);
+    // });
 // });
 
 

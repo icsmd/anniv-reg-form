@@ -426,7 +426,7 @@
 
     <link rel="stylesheet" type="text/css" href="{{ asset('vendor/plugins/magnific/magnific-popup.css') }}">
 </head>
-<body class="dashboard-page">
+<body class="dashboard-page" style="background-color: #e2e8f0 !important;">
     <!-- Vue Mount -->
     <div id="app">
         <router-view></router-view>

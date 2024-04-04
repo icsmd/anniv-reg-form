@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Front;
 
 
 use App\Http\Controllers\Controller;
+use App\Http\Validators\Front\EmailValidator;
 use App\Services\RegistrationService;
 use App\Libraries\HttpResponseHandlerLibrary as Response;
 use Symfony\Component\HttpFoundation\Response as HttpCode;
@@ -27,14 +28,24 @@ class RegistrationFrontController extends Controller
         }
     }
 
-    public function saveRegistration()
+    public function validateEmail()
     {
         try {
-
+            EmailValidator::validate(request());
+            return Response::formatSuccessResponse('Email is valid', true, HttpCode::HTTP_OK);
         } catch (\Throwable $oException) {
-            
+            return Response::formatErrorResponse($oException);
         }
     }
 
+    public function saveRegistration()
+    {
+        try {
+            $aResult = $this->oRegistrationService->createRegistration(request()->all());
+            return Response::formatSuccessResponse($aResult['message'], $aResult['data'], $aResult['code']);
+        } catch (\Throwable $oException) {
+            return Response::formatErrorResponse($oException);
+        }
+    }
 }
 

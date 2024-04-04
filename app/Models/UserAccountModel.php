@@ -4,17 +4,17 @@ namespace app\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class RegistrationModel extends Model {
+class UserAccountModel extends Model {
     const CREATED_AT = 'date_created';
     const UPDATED_AT = 'date_modified';
-    protected $table = "r_uacs";
+    protected $table = "t_user_account";
 
-    protected $primaryKey = "uacs_id";
+    protected $primaryKey = "user_id";
 
     protected $fillable = [
-        "uacs_acc_title",
-        "uacs_code",
-        "uacs_fund_type",
+        "username",
+        "password",
+        "agency",
         "date_modified"
     ];
 }

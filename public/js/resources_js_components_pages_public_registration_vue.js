@@ -17,7 +17,24 @@ __webpack_require__.r(__webpack_exports__);
   mixins: [_libraries_request__WEBPACK_IMPORTED_MODULE_0__["default"]],
   data: function data() {
     return {
-      aMstList: []
+      aMstList: [],
+      sInpEmail: '#inp_email',
+      sInpSalute: '#inp_salute',
+      sInpFname: '#inp_fname',
+      sInpMInitial: '#inp_minitial',
+      sInpLname: '#inp_lname',
+      sInpDept: '#inp_dept',
+      sInpDesig: '#inp_desig',
+      sInpMst: '#inp_mst',
+      sInpContact: '#inp_contact',
+      sInpPicture: '#inp_picture',
+      sInpPicturePreview: '#inp_pic_name_preview',
+      sInpIdCode: '#inp_idcode',
+      bEmailValid: false,
+      bFormValid: false,
+      bFormSubmitted: true,
+      sConvertedImage: '',
+      aSubmitResult: []
     };
   },
   created: function created() {
@@ -25,6 +42,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   mounted: function mounted() {
     this.getMstList();
+    this.initEventListeners();
   },
   methods: {
     getMstList: function getMstList() {
@@ -33,6 +51,134 @@ __webpack_require__.r(__webpack_exports__);
         _this.aMstList = mResponse.data;
         $('.mst-select').select2();
       });
+    },
+    initEventListeners: function initEventListeners() {
+      var mSelf = this;
+      document.body.addEventListener('click', function (event) {
+        event.preventDefault();
+        if (event.target.id === 'btnValidateEmail') {
+          mSelf.validateEmail();
+        }
+        if (event.target.id === 'inp_picture') {
+          mSelf.getImageUpload();
+        }
+        if (event.target.id === 'btnSubmitForm') {
+          mSelf.submitForm();
+        }
+      }, false);
+    },
+    getImageUpload: function getImageUpload() {
+      var mSelf = this;
+      var oInput = document.createElement('input');
+      oInput.type = 'file';
+      oInput.onchange = function (e) {
+        var file = e.target.files[0];
+        if (file) {
+          var aValidationResult = mSelf.validateImage(file);
+          if (aValidationResult.bResult === true) {
+            $(mSelf.sInpPicturePreview).val(file.name);
+            var reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = function () {
+              var base64String = reader.result.split(',')[1];
+              mSelf.sConvertedImage = 'data:' + file.type + ';base64,' + base64String;
+            };
+            reader.onerror = function (error) {
+              mSelf.showErrorAlert('Error:', error);
+            };
+          } else {
+            // Reset values
+            $(mSelf.sInpPicturePreview).val('');
+            $(mSelf.sInpPicturePreview).css('background-color', '#ffffff');
+            mSelf.sConvertedImage = '';
+            mSelf.showErrorAlert(aValidationResult.sMessage);
+          }
+        } else {
+          mSelf.showErrorAlert('No file selected');
+        }
+      };
+      oInput.click();
+    },
+    validateImage: function validateImage(oFile) {
+      var fFileSizeMb = oFile.size / (1024 * 1024);
+      var sFileType = oFile.type;
+      var iFileSizeLimitMb = 5;
+      var aAllowedFileTypes = ['image/png', 'image/jpg', 'image/jpeg'];
+      var bResult = true;
+      var sMessage = 'Successfully validated the file.';
+      if (iFileSizeLimitMb <= fFileSizeMb) {
+        bResult = false;
+        sMessage = 'The file size must not exceed 5 MB!';
+      } else if (aAllowedFileTypes.some(function (str) {
+        return str.includes(sFileType);
+      }) !== true) {
+        bResult = false;
+        sMessage = 'The accepted file types that are .jpg, .jpeg, and .png only!';
+      }
+      return {
+        bResult: bResult,
+        sMessage: sMessage
+      };
+    },
+    validateEmail: function validateEmail() {
+      var _this2 = this;
+      var sEmail = $(this.sInpEmail).val();
+      $(this.sInpEmail).css('background-color', '#ffcbcb');
+      if (sEmail === '') {
+        this.showErrorAlert('Email is required!');
+      } else {
+        this.postRequest('validate-email', {
+          email: sEmail
+        }, function (mResponse) {
+          $(_this2.sInpEmail).css('background-color', '#c3ffd6');
+        });
+      }
+    },
+    validateForm: function validateForm() {
+      var aInputFields = [this.sInpSalute, this.sInpFname, this.sInpMInitial, this.sInpLname, this.sInpDept, this.sInpDesig, this.sInpMst, this.sInpContact, this.sInpPicturePreview, this.sInpIdCode];
+      var aValidationResults = [];
+      aInputFields.forEach(function (element) {
+        var oInpElement = $(element);
+        if (oInpElement.val() === '' || oInpElement.val() === null) {
+          oInpElement.css('background-color', '#ffcbcb');
+          aValidationResults.push('false');
+        } else {
+          oInpElement.css('background-color', '#c3ffd6');
+          aValidationResults.push('true');
+        }
+      });
+      return aValidationResults.some(function (str) {
+        return str.includes('false');
+      });
+    },
+    submitForm: function submitForm() {
+      var _this3 = this;
+      var bFormNotValid = this.validateForm();
+      if (bFormNotValid === true) {
+        this.showErrorAlert('Please double check and correct your entries!');
+      } else {
+        var oParams = {
+          'email': $(this.sInpEmail).val(),
+          'first_name': $(this.sInpFname).val(),
+          'middle_initial': $(this.sInpMInitial).val(),
+          'last_name': $(this.sInpLname).val(),
+          'salutation': $(this.sInpSalute).val(),
+          // 'suffix': $(this.oInpSalute).val(),
+          'department': $(this.sInpDept).val(),
+          'designation': $(this.sInpDesig).val(),
+          'contact_number': $(this.sInpContact).val(),
+          'id_code': $(this.sInpIdCode).val(),
+          'picture': this.sConvertedImage,
+          'mst_id': $(this.sInpMst).val()
+        };
+        this.postRequest('submit-form', oParams, function (mResponse) {
+          if (mResponse.code === 201) {
+            _this3.bFormSubmitted = true;
+            window.scrollTo(0, 0);
+            _this3.aSubmitResult = mResponse.data;
+          }
+        });
+      }
     }
   }
 });
@@ -52,88 +198,112 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 
 var _hoisted_1 = {
-  "class": "admin-form theme-primary mw1000 center-block animated fadeIn"
+  style: {
+    "background-color": "#e2e8f0"
+  }
 };
 var _hoisted_2 = {
-  "class": "panel panel-primary heading-border center-block col-md-8"
+  "class": "admin-form theme-primary mw1000 center-block animated fadeIn"
 };
 var _hoisted_3 = {
+  key: 0,
+  "class": "panel panel-primary heading-border center-block col-md-8"
+};
+var _hoisted_4 = {
   "class": "panel-body"
 };
-var _hoisted_4 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+var _hoisted_5 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
   "class": "section-divider mt20 mb40"
 }, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", null, " Normal validation rules ")], -1 /* HOISTED */);
-var _hoisted_5 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<div class=\"row\"><label class=\"col-md-12 custom-label\">Email Address:</label><div class=\"col-md-12\"><div class=\"col-md-6 custom-margin\"><label for=\"firstname\" class=\"field prepend-icon\"><input type=\"text\" name=\"firstname\" id=\"firstname\" class=\"gui-input\" placeholder=\"e.g., juandelacruz@gmail.com \"><label for=\"firstname\" class=\"field-icon\"><i class=\"fa fa-envelope\"></i></label></label></div></div></div>", 1);
-var _hoisted_6 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<div class=\"row\"><label class=\"col-md-12 custom-label\">Salutation:</label><div class=\"col-md-12\"><div class=\"col-md-12 custom-margin\"><label for=\"firstname\" class=\"field prepend-icon\"><input type=\"text\" name=\"firstname\" id=\"firstname\" class=\"gui-input\" placeholder=\"e.g., Mr., Ms., Mrs., Dr., Ret Gen., etc.\"><label for=\"firstname\" class=\"field-icon\"><i class=\"fa fa-envelope\"></i></label></label></div></div></div>", 1);
-var _hoisted_7 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<div class=\"row\"><label class=\"col-md-12 custom-label\">First Name:</label><div class=\"col-md-12\"><div class=\"col-md-12 custom-margin\"><label for=\"firstname\" class=\"field prepend-icon\"><input type=\"text\" name=\"firstname\" id=\"firstname\" class=\"gui-input\" placeholder=\"e.g., Juan\"><label for=\"firstname\" class=\"field-icon\"><i class=\"fa fa-user\"></i></label></label></div></div></div>", 1);
-var _hoisted_8 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<div class=\"row\"><label class=\"col-md-12 custom-label\">Middle Initial:</label><div class=\"col-md-12\"><div class=\"col-md-12 custom-margin\"><label for=\"lastname\" class=\"field prepend-icon\"><input type=\"text\" name=\"lastname\" id=\"lastname\" class=\"gui-input\" placeholder=\"e.g., G.\"><label for=\"lastname\" class=\"field-icon\"><i class=\"fa fa-user\"></i></label></label></div></div></div>", 1);
-var _hoisted_9 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<div class=\"row\"><label class=\"col-md-12 custom-label\">Last Name:</label><div class=\"col-md-12\"><div class=\"col-md-12 custom-margin\"><label for=\"lastname\" class=\"field prepend-icon\"><input type=\"text\" name=\"lastname\" id=\"lastname\" class=\"gui-input\" placeholder=\"e.g., Dela Cruz\"><label for=\"lastname\" class=\"field-icon\"><i class=\"fa fa-user\"></i></label></label></div></div></div>", 1);
-var _hoisted_10 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<div class=\"row\"><label class=\"col-md-12 custom-label\">Department/Agency/Office/Embassy:</label><div class=\"col-md-12\"><div class=\"col-md-12 custom-margin\"><label for=\"firstname\" class=\"field prepend-icon\"><input type=\"text\" name=\"firstname\" id=\"firstname\" class=\"gui-input\" placeholder=\"e.g., Department of Justice, Bureau of Customs, Philippine National Police, etc.\"><label for=\"firstname\" class=\"field-icon\"><i class=\"fa fa-building\"></i></label></label></div></div></div>", 1);
-var _hoisted_11 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<div class=\"row\"><label class=\"col-md-12 custom-label\">Designation/Position:</label><div class=\"col-md-12\"><div class=\"col-md-12 custom-margin\"><label for=\"firstname\" class=\"field prepend-icon\"><input type=\"text\" name=\"firstname\" id=\"firstname\" class=\"gui-input\" placeholder=\"e.g., Police/Military Officer, Consultant, Director, etc.\"><label for=\"firstname\" class=\"field-icon\"><i class=\"fa fa-suitcase\"></i></label></label></div></div></div>", 1);
-var _hoisted_12 = {
+var _hoisted_6 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<div class=\"row\"><label class=\"col-md-12 custom-label\">Email Address: <span class=\"required\">*</span></label><div class=\"col-md-12\"><div class=\"col-md-6 custom-margin\"><label for=\"inp_email\" class=\"field prepend-icon\"><input type=\"text\" name=\"inp_email\" id=\"inp_email\" class=\"gui-input\" placeholder=\"e.g., juandelacruz@gmail.com \"><label for=\"inp_email\" class=\"field-icon\"><i class=\"fa fa-envelope\"></i></label></label></div><div class=\"col-md-6 custom-margin\"><button id=\"btnValidateEmail\" class=\"button btn-primary\"><i class=\"fa fa-check\"></i> Validate Email </button><p id=\"p_email_validate\" style=\"display:none;\">Validating... Please wait.</p></div></div></div>", 1);
+var _hoisted_7 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<div class=\"row\"><label class=\"col-md-12 custom-label\">Salutation: <span class=\"required\">*</span></label><div class=\"col-md-12\"><div class=\"col-md-12 custom-margin\"><label for=\"inp_salute\" class=\"field prepend-icon\"><input type=\"text\" name=\"inp_salute\" id=\"inp_salute\" class=\"gui-input\" placeholder=\"e.g., Mr., Ms., Mrs., Dr., Ret Gen., etc.\"><label for=\"inp_salute\" class=\"field-icon\"><i class=\"fa fa-envelope\"></i></label></label></div></div></div>", 1);
+var _hoisted_8 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<div class=\"row\"><label class=\"col-md-12 custom-label\">First Name: <span class=\"required\">*</span></label><div class=\"col-md-12\"><div class=\"col-md-12 custom-margin\"><label for=\"inp_fname\" class=\"field prepend-icon\"><input type=\"text\" name=\"inp_fname\" id=\"inp_fname\" class=\"gui-input\" placeholder=\"e.g., Juan\"><label for=\"inp_fname\" class=\"field-icon\"><i class=\"fa fa-user\"></i></label></label></div></div></div>", 1);
+var _hoisted_9 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<div class=\"row\"><label class=\"col-md-12 custom-label\">Middle Initial: </label><div class=\"col-md-12\"><div class=\"col-md-12 custom-margin\"><label for=\"inp_minitial\" class=\"field prepend-icon\"><input type=\"text\" name=\"inp_minitial\" id=\"inp_minitial\" class=\"gui-input\" placeholder=\"e.g., G.\"><label for=\"inp_minitial\" class=\"field-icon\"><i class=\"fa fa-user\"></i></label></label></div></div></div>", 1);
+var _hoisted_10 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<div class=\"row\"><label class=\"col-md-12 custom-label\">Last Name: <span class=\"required\">*</span></label><div class=\"col-md-12\"><div class=\"col-md-12 custom-margin\"><label for=\"inp_lname\" class=\"field prepend-icon\"><input type=\"text\" name=\"inp_lname\" id=\"inp_lname\" class=\"gui-input\" placeholder=\"e.g., Dela Cruz\"><label for=\"inp_lname\" class=\"field-icon\"><i class=\"fa fa-user\"></i></label></label></div></div></div>", 1);
+var _hoisted_11 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<div class=\"row\"><label class=\"col-md-12 custom-label\">Department/Agency/Office/Embassy: <span class=\"required\">*</span></label><div class=\"col-md-12\"><div class=\"col-md-12 custom-margin\"><label for=\"inp_dept\" class=\"field prepend-icon\"><input type=\"text\" name=\"inp_dept\" id=\"inp_dept\" class=\"gui-input\" placeholder=\"e.g., Department of Justice, Bureau of Customs, Philippine National Police, etc.\"><label for=\"inp_dept\" class=\"field-icon\"><i class=\"fa fa-building\"></i></label></label></div></div></div>", 1);
+var _hoisted_12 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<div class=\"row\"><label class=\"col-md-12 custom-label\">Designation/Position: <span class=\"required\">*</span></label><div class=\"col-md-12\"><div class=\"col-md-12 custom-margin\"><label for=\"inp_desig\" class=\"field prepend-icon\"><input type=\"text\" name=\"inp_desig\" id=\"inp_desig\" class=\"gui-input\" placeholder=\"e.g., Police/Military Officer, Consultant, Director, etc.\"><label for=\"inp_desig\" class=\"field-icon\"><i class=\"fa fa-suitcase\"></i></label></label></div></div></div>", 1);
+var _hoisted_13 = {
   "class": "row"
 };
-var _hoisted_13 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+var _hoisted_14 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
   "class": "col-md-12 custom-label"
-}, "Membership:", -1 /* HOISTED */);
-var _hoisted_14 = {
-  "class": "col-md-12"
-};
+}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Membership: "), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", {
+  "class": "required"
+}, "*")], -1 /* HOISTED */);
 var _hoisted_15 = {
-  "class": "form-group"
+  "class": "col-md-12"
 };
 var _hoisted_16 = {
-  "class": "col-lg-12 custom-margin"
+  "class": "form-group"
 };
 var _hoisted_17 = {
-  "class": "select2-single form-control mst-select",
-  id: "inp_payee"
+  "class": "col-lg-12 custom-margin"
 };
-var _hoisted_18 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("option", {
+var _hoisted_18 = {
+  "class": "select2-single form-control mst-select",
+  id: "inp_mst"
+};
+var _hoisted_19 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("option", {
   disabled: "",
-  value: "0",
+  value: "",
   selected: ""
 }, "Please select membership", -1 /* HOISTED */);
-var _hoisted_19 = ["value"];
-var _hoisted_20 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<div class=\"row\"><label class=\"col-md-12 custom-label\">Contact Number:</label><div class=\"col-md-12\"><div class=\"col-md-12 custom-margin\"><label for=\"firstname\" class=\"field prepend-icon\"><input type=\"text\" name=\"firstname\" id=\"firstname\" class=\"gui-input\" placeholder=\"e.g., 09123456789\"><label for=\"firstname\" class=\"field-icon\"><i class=\"fa fa-mobile\"></i></label></label></div></div></div>", 1);
-var _hoisted_21 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
-  "class": "row"
-}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
-  "class": "col-md-12 custom-label"
-}, "Upload Picture:"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
-  "class": "col-md-12"
+var _hoisted_20 = ["value"];
+var _hoisted_21 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<div class=\"row\"><label class=\"col-md-12 custom-label\">Contact Number: <span class=\"required\">*</span></label><div class=\"col-md-12\"><div class=\"col-md-12 custom-margin\"><label for=\"inp_contact\" class=\"field prepend-icon\"><input type=\"text\" name=\"inp_contact\" id=\"inp_contact\" class=\"gui-input\" placeholder=\"e.g., 09123456789\"><label for=\"inp_contact\" class=\"field-icon\"><i class=\"fa fa-mobile\"></i></label></label></div></div></div>", 1);
+var _hoisted_22 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<div class=\"row\"><label class=\"col-md-12 custom-label\">Upload Picture: <span class=\"required\">*</span></label><div class=\"col-md-12\"><div class=\"col-md-12\"><div class=\"section\"><label class=\"field prepend-icon append-button file\"><span class=\"button btn-primary\">Choose File</span><input type=\"file\" class=\"gui-file\" name=\"inp_picture\" id=\"inp_picture\"><input type=\"text\" class=\"gui-input\" id=\"inp_pic_name_preview\" placeholder=\"Please Select A File\"><label class=\"field-icon\"><i class=\"fa fa-upload\"></i></label></label></div></div></div></div>", 1);
+var _hoisted_23 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<div class=\"row\"><label class=\"col-md-12 custom-label\">ID Code: <span class=\"required\">*</span></label><div class=\"col-md-12\"><div class=\"col-md-12 custom-margin\"><label for=\"inp_idcode\" class=\"field prepend-icon\"><input type=\"text\" name=\"inp_idcode\" id=\"inp_idcode\" class=\"gui-input\" placeholder=\"e.g., 12345\"><label for=\"inp_idcode\" class=\"field-icon\"><i class=\"fa fa-code\"></i></label></label></div></div></div>", 1);
+var _hoisted_24 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<div class=\"panel-footer text-right\"><button type=\"reset\" id=\"btnClearForm\" class=\"button\"><i class=\"fa fa-undo\"></i>   Clear All </button>   <button id=\"btnSubmitForm\" class=\"button btn-success\"><i class=\"fa fa-send\"></i>   Submit </button></div>", 1);
+var _hoisted_25 = {
+  "class": "center-block mt70",
+  style: {
+    "max-width": "625px"
+  }
+};
+var _hoisted_26 = {
+  style: {
+    "margin": "5%"
+  }
+};
+var _hoisted_27 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+  "class": "row table-layout"
 }, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
-  "class": "col-md-12"
-}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
-  "class": "section"
-}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
-  "class": "field prepend-icon append-button file"
-}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", {
-  "class": "button btn-primary"
-}, "Choose File"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
-  type: "file",
-  "class": "gui-file",
-  name: "file1",
-  id: "file1",
-  onChange: "document.getElementById('uploader1').value = this.value;"
-}), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
-  type: "text",
-  "class": "gui-input",
-  id: "uploader1",
-  placeholder: "Please Select A File"
-}), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
-  "class": "field-icon"
+  "class": "col-xs-12 pln"
+}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h2", {
+  "class": "text-dark mbn confirmation-header"
 }, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
-  "class": "fa fa-upload"
-})])])])])])], -1 /* HOISTED */);
-var _hoisted_22 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<div class=\"row\"><label class=\"col-md-12 custom-label\">ID Code:</label><div class=\"col-md-12\"><div class=\"col-md-12 custom-margin\"><label for=\"firstname\" class=\"field prepend-icon\"><input type=\"text\" name=\"firstname\" id=\"firstname\" class=\"gui-input\" placeholder=\"e.g., 12345\"><label for=\"firstname\" class=\"field-icon\"><i class=\"fa fa-code\"></i></label></label></div></div></div>", 1);
-var _hoisted_23 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<div class=\"panel-footer text-right\"><button type=\"reset\" id=\"btnClearForm\" class=\"button\"><i class=\"fa fa-undo\"></i>   Clear All </button>   <button type=\"submit\" id=\"btnSubmitForm\" class=\"button btn-success\"><i class=\"fa fa-send\"></i>   Submit </button></div>", 1);
+  "class": "fa fa-check text-success"
+}), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" You have successfully registered!")])])], -1 /* HOISTED */);
+var _hoisted_28 = {
+  "class": "panel mt15"
+};
+var _hoisted_29 = {
+  "class": "panel-body pt30 p25 pb15"
+};
+var _hoisted_30 = {
+  "class": "lead"
+};
+var _hoisted_31 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("hr", {
+  "class": "alt short mv25"
+}, null, -1 /* HOISTED */);
+var _hoisted_32 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", {
+  "class": "lh25 text-muted fs15"
+}, " Thank you for registering for the anniversary celebration. You may take a picture or save a screenshot of this page for your own copy of proof of registration. ", -1 /* HOISTED */);
+var _hoisted_33 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("br", null, null, -1 /* HOISTED */);
+var _hoisted_34 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", {
+  "class": "lh25 text-muted fs15"
+}, "We'll contact you once again by the email and number you provided for further details of the said event. ", -1 /* HOISTED */);
+var _hoisted_35 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("br", null, null, -1 /* HOISTED */);
+var _hoisted_36 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", {
+  "class": "lh25 text-muted fs15"
+}, "You may now close this page. ", -1 /* HOISTED */);
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" START: REGISTRATION FORM "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" START: REG FORM BODY "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" START: SECTION DIVIDER "), _hoisted_4, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" END: SECTION DIVIDER "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" START: EMAIL INPUT "), _hoisted_5, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" START: SALUTATION INPUT "), _hoisted_6, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" START: FIRST NAME INPUT "), _hoisted_7, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" START: MIDDLE INITIAL INPUT "), _hoisted_8, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" START: LAST NAME INPUT "), _hoisted_9, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" START: DEPARTMENT INPUT "), _hoisted_10, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" START: DESIGNATION INPUT "), _hoisted_11, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" START: MEMBERSHIP INPUT "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_12, [_hoisted_13, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_14, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_15, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_16, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("select", _hoisted_17, [_hoisted_18, ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.aMstList, function (item) {
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" START: REGISTRATION FORM "), $data.bFormSubmitted === false ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" START: REG FORM BODY "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" START: SECTION DIVIDER "), _hoisted_5, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" END: SECTION DIVIDER "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" START: EMAIL INPUT "), _hoisted_6, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" START: SALUTATION INPUT "), _hoisted_7, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" START: FIRST NAME INPUT "), _hoisted_8, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" START: MIDDLE INITIAL INPUT "), _hoisted_9, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" START: LAST NAME INPUT "), _hoisted_10, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" START: DEPARTMENT INPUT "), _hoisted_11, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" START: DESIGNATION INPUT "), _hoisted_12, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" START: MEMBERSHIP INPUT "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_13, [_hoisted_14, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_15, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_16, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_17, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("select", _hoisted_18, [_hoisted_19, ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.aMstList, function (item) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("option", {
       value: item.mst_id
-    }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(item.mst_desc), 9 /* TEXT, PROPS */, _hoisted_19);
-  }), 256 /* UNKEYED_FRAGMENT */))])])])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" START: CONTACT NUMBER "), _hoisted_20, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" START: UPLOAD PICTURE "), _hoisted_21, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" START: ID CODE INPUT "), _hoisted_22]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" END: REG FORM BODY "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" START: REG FORM FOOTER "), _hoisted_23, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" END: REG FORM FOOTER ")])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" END: REGISTRATION FORM ")], 2112 /* STABLE_FRAGMENT, DEV_ROOT_FRAGMENT */);
+    }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(item.mst_desc), 9 /* TEXT, PROPS */, _hoisted_20);
+  }), 256 /* UNKEYED_FRAGMENT */))])])])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" START: CONTACT NUMBER "), _hoisted_21, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" START: UPLOAD PICTURE "), _hoisted_22, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" START: ID CODE INPUT "), _hoisted_23]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" END: REG FORM BODY "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" START: REG FORM FOOTER "), _hoisted_24, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" END: REG FORM FOOTER ")])) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
+    key: 1
+  }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" END: REGISTRATION FORM "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" START: SUCCESS PANEL "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_25, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_26, [_hoisted_27, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Details "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_28, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_29, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_30, "Hello " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.aSubmitResult.salutation) + " " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.aSubmitResult.first_name) + " " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.aSubmitResult.middle_initial) + " " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.aSubmitResult.last_name) + ",", 1 /* TEXT */), _hoisted_31, _hoisted_32, _hoisted_33, _hoisted_34, _hoisted_35, _hoisted_36, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <p class=\"text-right mt20\"><button class=\"btn btn-primary btn-rounded ph40\" type=\"button\" onclick=\"window.close()\">Close Page</button>\r\n            </p> ")])])])])], 2112 /* STABLE_FRAGMENT, DEV_ROOT_FRAGMENT */))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" END: SUCCESS PANEL ")]);
 }
 
 /***/ }),
@@ -154,7 +324,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.custom-margin {\r\n  margin-bottom: 20px;\n}\n.custom-label {\r\n  margin-left: 11px !important;\r\n  margin-bottom: 5px !important;\r\n  font-weight: 700 !important;\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.required {\r\n  color: red !important;\r\n  font-size: 18px !important;\n}\n.custom-margin {\r\n  margin-bottom: 20px !important;\n}\n.custom-label {\r\n  margin-left: 11px !important;\r\n  margin-bottom: 5px !important;\r\n  font-weight: 700 !important;\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
