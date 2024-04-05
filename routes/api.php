@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\UserAccountApiController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\RegistrationApiController;
 
@@ -19,5 +20,7 @@ Route::prefix('v1')->group(function () {
     Route::get('registration/get-all', [RegistrationApiController::class, 'getAllRegistration']);
     // NOTE: Provide header token authentication middleware (Internal)
     Route::post('registration/create', [RegistrationApiController::class, 'createRegistration']);
+
+    Route::post('admin/user/create', [UserAccountApiController::class, 'createUserAccount']);
 });
 

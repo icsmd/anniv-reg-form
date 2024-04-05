@@ -5,47 +5,36 @@ import HttpRequest from './libraries/request.js'
 
 // Import Layout Components
 import C_Layout_Header from './components/layouts/header.vue'
-import C_Layout_SYSA_Sidebar from './components/layouts/sysa/sysa_sidebar.vue'
-
-import C_SYSA_SYS_MGT_SETUP_TAX_CLASS from './components/pages/sysa/sys-mgt/sys-setup-tax-class.vue'
-import C_SYSA_SYS_MGT_SETUP_TAX_CODE from './components/pages/sysa/sys-mgt/sys-setup-tax-code.vue'
+import C_Layout_ADMIN_Sidebar from './components/layouts/admin/admin_sidebar.vue'
 
 import C_WebDevInProgress from './components/pages/WebDevInProgress.vue'
 
 // Define route components (import components).
 const C_Login = import('./components/pages/login.vue')
 const C_404 = import('./components/pages/utilities/404.vue')
+
+// PUBLIC COMPONENTS
 const C_PUBLIC_Registration = import('./components/pages/public/registration.vue')
 
-// SYSTEM ADMINISTRATOR
-const C_SYSA_dashboard = import('./components/pages/sysa/sysa_dashboard.vue')
-const C_SYSA_SYS_MGT_ACC_MGT = import('./components/pages/sysa/sys-mgt/acc-mgt.vue')
-const C_SYSA_SYS_MGT_SETUP_OFFICE = import('./components/pages/sysa/sys-mgt/sys-setup-office.vue')
-const C_SYSA_SYS_MGT_SETUP_UACS = import('./components/pages/sysa/sys-mgt/sys-setup-uacs.vue')
-const C_SYSA_SYS_MGT_SETUP_TAX = import('./components/pages/sysa/sys-mgt/sys-setup-tax.vue')
-const C_SYSA_SYS_MGT_USER_LOGS = import('./components/pages/sysa/sys-mgt/sys-logs.vue')
-const C_SYSA_SYS_MISC_HELP_DESK = import('./components/pages/sysa/misc/help-desk.vue')
+// ADMIN COMPONENTS
+const C_ADMIN_Dashboard = import('./components/pages/admin/admin_dashboard.vue')
+const C_ADMIN_Registrant_Detail = import('./components/pages/admin/admin_registrant_detail.vue')
 
 // REPORTS - PRINTABLES
 const P_GEN_report_print_liquidation = import('./components/printable/printable_report_liquidation.vue')
 
 // Define route paths
 const routes = [
-  { path: '/', component: () => C_Login },
   { path: '/public/registration', component: () => C_PUBLIC_Registration },
   {
     path: '/front/404', component: () => C_404
   },
   {
-    path: '/front/sysa',
+    path: '/admin',
     children: [
-      { path: 'home', component: () => C_SYSA_dashboard },
-      { path: 'mgt/acc-mgt', component: () => C_SYSA_SYS_MGT_ACC_MGT },
-      { path: 'mgt/setup/office', component: () => C_SYSA_SYS_MGT_SETUP_OFFICE },
-      { path: 'mgt/setup/uacs', component: () => C_SYSA_SYS_MGT_SETUP_UACS },
-      { path: 'mgt/setup/tax', component: () => C_SYSA_SYS_MGT_SETUP_TAX },
-      { path: 'mgt/user-logs', component: () => C_SYSA_SYS_MGT_USER_LOGS },
-      { path: 'misc/help-desk', component: () => C_SYSA_SYS_MISC_HELP_DESK },
+      { path: '', component: () => C_Login },
+      { path: 'home', component: () => C_ADMIN_Dashboard },
+      { path: 'registrant/details', component: () => C_ADMIN_Registrant_Detail },
     ]
   }
 ]
@@ -68,7 +57,7 @@ const app = createApp({
     }
   },
   created() {
-    // this.getUserInfo();
+    this.getUserInfo();
   },
   methods: {
     // Method for initializing template plugin
@@ -430,9 +419,7 @@ const app = createApp({
 // Register components that are not included in the vue router
 app
   .component('C_Layout_Header', C_Layout_Header)
-  .component('C_Layout_SYSA_Sidebar', C_Layout_SYSA_Sidebar)
-  .component('C_SYSA_SYS_MGT_SETUP_TAX_CLASS', C_SYSA_SYS_MGT_SETUP_TAX_CLASS)
-  .component('C_SYSA_SYS_MGT_SETUP_TAX_CODE', C_SYSA_SYS_MGT_SETUP_TAX_CODE)
+  .component('C_Layout_ADMIN_Sidebar', C_Layout_ADMIN_Sidebar)
   .component('C_WebDevInProgress', C_WebDevInProgress)
 
 // Use the router instance

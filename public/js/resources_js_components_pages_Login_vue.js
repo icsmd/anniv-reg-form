@@ -27,7 +27,7 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   mounted: function mounted() {
-    this.$root.clearLocalStorage();
+    // this.$root.clearLocalStorage();
     this.initializeActions();
   },
   methods: {

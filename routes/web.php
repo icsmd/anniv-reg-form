@@ -22,17 +22,24 @@ Route::get('public/{any?}', function () {
     return view('main');
 })->where('any', '.*');
 
+Route::get('admin/{any?}', function () {
+    return view('main');
+})->where('any', '.*');
+
 Route::get('get-mst', [RegistrationFrontController::class, 'getMembershipTypes']);
 Route::post('validate-email', [RegistrationFrontController::class, 'validateEmail']);
 Route::post('submit-form', [RegistrationFrontController::class, 'saveRegistration']);
 
 
-// Route::post('auth/log-in', [AuthFrontController::class, 'login']);
-// Route::post('auth/log-out', [AuthFrontController::class, 'logout']);
+Route::post('auth/log-in', [AuthFrontController::class, 'login']);
+Route::post('auth/log-out', [AuthFrontController::class, 'logout']);
+Route::get('user/session', [AuthFrontController::class, 'getUserSession']);
+Route::get('get-reg-list', [RegistrationFrontController::class, 'getRegistrationList']);
+Route::get('get-reg-details/{id}', [RegistrationFrontController::class, 'getRegistrationDetails']);
 
 // Route::middleware(['session.check'])->group(function () {
     // Route::prefix('user')->group(function () {
-    //     Route::get('session', [AuthFrontController::class, 'getUserSession']);
+        
     // });
 // });
 

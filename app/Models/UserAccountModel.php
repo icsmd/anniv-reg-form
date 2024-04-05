@@ -1,6 +1,6 @@
 <?php
 
-namespace app\Models;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -14,7 +14,10 @@ class UserAccountModel extends Model {
     protected $fillable = [
         "username",
         "password",
-        "agency",
-        "date_modified"
+        "agency"
+    ];
+
+    protected $encrypted_attributes = [
+        "password"
     ];
 }

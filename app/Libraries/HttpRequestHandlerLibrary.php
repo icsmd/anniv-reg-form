@@ -13,10 +13,6 @@ class HttpRequestHandlerLibrary
             $sApiVersion = config("app.api_version");
             $sCompleteUrl = "$sInternalApiHost/$sApiVersion/$sRequestUrl";
             $mResult = Http::$sMethod($sCompleteUrl, $aParams);
-            var_dump($mResult);
-dd();
-            http_response_code(500);
-            dd($mResult);
             return $mResult->json();
 
         } catch (\Throwable $oException) {

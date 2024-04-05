@@ -83,7 +83,7 @@ export default {
     }
   },
   mounted() {
-    this.$root.clearLocalStorage();
+    // this.$root.clearLocalStorage();
     this.initializeActions();
   },
   methods: {

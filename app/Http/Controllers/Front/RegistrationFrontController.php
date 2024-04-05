@@ -47,5 +47,25 @@ class RegistrationFrontController extends Controller
             return Response::formatErrorResponse($oException);
         }
     }
+
+    public function getRegistrationList()
+    {
+        try {
+            $aResult = $this->oRegistrationService->getRegistrationList(request()->all());
+            return Response::formatSuccessResponse($aResult['message'], $aResult['data'], $aResult['code']);
+        } catch (\Throwable $oException) {
+            return Response::formatErrorResponse($oException);
+        }
+    }
+
+    public function getRegistrationDetails($iId)
+    {
+        try {
+            $aResult = $this->oRegistrationService->getRegistrationDetails($iId);
+            return Response::formatSuccessResponse($aResult['message'], $aResult['data'], $aResult['code']);
+        } catch (\Throwable $oException) {
+            return Response::formatErrorResponse($oException);
+        }
+    }
 }
 

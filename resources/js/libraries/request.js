@@ -6,7 +6,7 @@ export default {
     ],
     data () {
         return {
-
+            sActivePage: '',
         }
     },
     methods: {
@@ -51,12 +51,15 @@ export default {
         },
 
         catchRequest: function (mResponse) {
-            console.log()
+            
             let sDefaultMsg = mResponse.message;
             let sResponseMsg = mResponse.response.data.message;
             let sFinalMessage = sResponseMsg === null ? sDefaultMsg : sResponseMsg;
             
             this.showErrorAlert(sFinalMessage);
+            if (this.sActivePage === 'registration') {
+                this.sEmailValidStat = 'false';
+            }
         }
     }
 }

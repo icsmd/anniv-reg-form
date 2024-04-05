@@ -26,10 +26,15 @@
                 </label>
               </div>
               <div class="col-md-6 custom-margin">
-                <button id="btnValidateEmail" class="button btn-primary">
+                <button v-if="sEmailValidStat === 'false'" id="btnValidateEmail" class="button btn-primary">
                   <i class="fa fa-check"></i> Validate Email
                 </button>
-                <p id="p_email_validate" style="display: none;">Validating... Please wait.</p>
+                <p v-else-if="sEmailValidStat === 'pending'" id="p_email_validating" style="margin-top: 10px">
+                  <i class="fa fa-spinner"></i>&nbsp;
+                  Validating... Please wait.</p>
+                <p v-else id="p_email_valid" style="margin-top: 10px">
+                  <i class="fa fa-check-circle"></i>&nbsp;
+                  Email is valid.</p>
               </div>
             </div>
           </div>
@@ -156,14 +161,14 @@
             <div class="col-md-12">
               <div class="col-md-12">
                 <div class="section">
-                    <label class="field prepend-icon append-button file">
-                      <span class="button btn-primary">Choose File</span>
-                      <input type="file" class="gui-file" name="inp_picture" id="inp_picture">
-                      <input type="text" class="gui-input" id="inp_pic_name_preview" placeholder="Please Select A File">
-                      <label class="field-icon">
-                        <i class="fa fa-upload"></i>
-                      </label>
+                  <label class="field prepend-icon append-button file">
+                    <span class="button btn-primary">Choose File</span>
+                    <input type="file" class="gui-file" name="inp_picture" id="inp_picture">
+                    <input type="text" class="gui-input" id="inp_pic_name_preview" placeholder="Please Select A File">
+                    <label class="field-icon">
+                      <i class="fa fa-upload"></i>
                     </label>
+                  </label>
                 </div>
               </div>
             </div>
@@ -205,34 +210,36 @@
       <div v-else class="center-block mt70" style="max-width: 625px;">
         <div style="margin: 5%">
           <div class="row table-layout">
-          <div class="col-xs-12 pln">
-            <h2 class="text-dark mbn confirmation-header"><i class="fa fa-check text-success"></i> You have successfully
-              registered!</h2>
+            <div class="col-xs-12 pln">
+              <h2 class="text-dark mbn confirmation-header"><i class="fa fa-check text-success"></i> You have
+                successfully
+                registered!</h2>
+            </div>
           </div>
-        </div>
 
-        <!-- Details -->
-        <div class="panel mt15">
-          <div class="panel-body pt30 p25 pb15">
-            <p class="lead">Hello {{ aSubmitResult.salutation }} {{ aSubmitResult.first_name }} {{
+          <!-- Details -->
+          <div class="panel mt15">
+            <div class="panel-body pt30 p25 pb15">
+              <p class="lead">Hello {{ aSubmitResult.salutation }} {{ aSubmitResult.first_name }} {{
         aSubmitResult.middle_initial }} {{ aSubmitResult.last_name }},</p>
-            <hr class="alt short mv25">
-            <p class="lh25 text-muted fs15">
-              Thank you for registering for the anniversary celebration. 
-              You may take a picture or save a screenshot of this page for your own copy of proof of registration.
+              <hr class="alt short mv25">
+              <p class="lh25 text-muted fs15">
+                Thank you for registering for the anniversary celebration.
+                You may take a picture or save a screenshot of this page for your own copy of proof of registration.
               </p>
-            <br>
-            <p class="lh25 text-muted fs15">We'll contact you once again by the email and number you provided for further details of the said event. </p>
-            <br>
-            <p class="lh25 text-muted fs15">You may now close this page. </p>
-            <!-- <p class="text-right mt20"><button class="btn btn-primary btn-rounded ph40" type="button" onclick="window.close()">Close Page</button>
+              <br>
+              <p class="lh25 text-muted fs15">We'll contact you once again by the email and number you provided for
+                further details of the said event. </p>
+              <br>
+              <p class="lh25 text-muted fs15">You may now close this page. </p>
+              <!-- <p class="text-right mt20"><button class="btn btn-primary btn-rounded ph40" type="button" onclick="window.close()">Close Page</button>
             </p> -->
+            </div>
           </div>
-        </div>
         </div>
       </div>
     </div>
-     <!-- END: SUCCESS PANEL -->
+    <!-- END: SUCCESS PANEL -->
   </div>
 
 </template>
@@ -257,7 +264,7 @@ export default {
       sInpPicture: '#inp_picture',
       sInpPicturePreview: '#inp_pic_name_preview',
       sInpIdCode: '#inp_idcode',
-      bEmailValid: false,
+      sEmailValidStat: 'false',
       bFormValid: false,
       bFormSubmitted: false,
       sConvertedImage: '',
@@ -265,6 +272,7 @@ export default {
     }
   },
   created() {
+    this.sActivePage = 'registration';
     document.title = 'Anniversary Celebration Registration'
   },
   mounted() {
@@ -340,7 +348,6 @@ export default {
         bResult = false;
         sMessage = 'The file size must not exceed 5 MB!'
       } else if (aAllowedFileTypes.some(str => str.includes(sFileType)) !== true) {
-
         bResult = false;
         sMessage = 'The accepted file types that are .jpg, .jpeg, and .png only!';
       }
@@ -355,8 +362,15 @@ export default {
       if (sEmail === '') {
         this.showErrorAlert('Email is required!')
       } else {
+        this.sEmailValidStat = 'pending';
         this.postRequest('validate-email', { email: sEmail }, (mResponse) => {
-          $(this.sInpEmail).css('background-color', '#c3ffd6');
+          if (mResponse.code !== 500) {
+            $(this.sInpEmail).css('background-color', '#c3ffd6');
+            this.sEmailValidStat = 'valid';
+          } else {
+            this.sEmailValidStat = 'false';
+          }
+
         });
       }
     },
