@@ -11,23 +11,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
-/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _libraries_request_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../libraries/request.js */ "./resources/js/libraries/request.js");
-/* harmony import */ var _libraries_utilities_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../libraries/utilities.js */ "./resources/js/libraries/utilities.js");
-
+/* harmony import */ var _libraries_request_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../libraries/request.js */ "./resources/js/libraries/request.js");
+/* harmony import */ var _libraries_utilities_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../libraries/utilities.js */ "./resources/js/libraries/utilities.js");
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  mixins: [_libraries_request_js__WEBPACK_IMPORTED_MODULE_1__["default"], _libraries_utilities_js__WEBPACK_IMPORTED_MODULE_2__["default"]],
+  mixins: [_libraries_request_js__WEBPACK_IMPORTED_MODULE_0__["default"], _libraries_utilities_js__WEBPACK_IMPORTED_MODULE_1__["default"]],
   data: function data() {
     return {
       sUsername: '',
       sPassword: ''
     };
   },
+  created: function created() {
+    document.title = 'RFM';
+  },
   mounted: function mounted() {
-    // this.$root.clearLocalStorage();
+    this.$root.clearLocalStorage();
     this.initializeActions();
   },
   methods: {
@@ -94,7 +94,7 @@ var _hoisted_6 = /*#__PURE__*/_withScopeId(function () {
       "text-align": "center",
       "font-size": "40px"
     }
-  }, " SCMS ", -1 /* HOISTED */);
+  }, " Registration Form Management ", -1 /* HOISTED */);
 });
 var _hoisted_7 = {
   "class": "panel mt30 mb25"
@@ -156,11 +156,7 @@ var _hoisted_19 = /*#__PURE__*/_withScopeId(function () {
 var _hoisted_20 = /*#__PURE__*/_withScopeId(function () {
   return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
     "class": "login-links"
-  }, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
-    href: "pages_forgotpw(alt).html",
-    "class": "active",
-    title: "Sign In"
-  }, "Forgot Password?")])], -1 /* HOISTED */);
+  }, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p")], -1 /* HOISTED */);
 });
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Start: Main "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Start: Content-Wrapper "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("section", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Begin: Content "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("section", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Login Logo "), _hoisted_6, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Login Panel/Form "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_8, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Username Input "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_9, [_hoisted_10, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {

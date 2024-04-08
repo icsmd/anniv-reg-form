@@ -7,6 +7,7 @@ export default {
     data () {
         return {
             sActivePage: '',
+            sActiveAction: '',
         }
     },
     methods: {
@@ -57,7 +58,7 @@ export default {
             let sFinalMessage = sResponseMsg === null ? sDefaultMsg : sResponseMsg;
             
             this.showErrorAlert(sFinalMessage);
-            if (this.sActivePage === 'registration') {
+            if (this.sActivePage === 'registration' && this.sActiveAction === 'email_verify') {
                 this.sEmailValidStat = 'false';
             }
         }

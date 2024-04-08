@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
 use App\Http\Validators\Front\EmailValidator;
+use App\Http\Validators\Front\RegistrationValidator;
+use App\Models\RegistrationModel;
 use App\Services\RegistrationService;
 use App\Libraries\HttpResponseHandlerLibrary as Response;
 use Symfony\Component\HttpFoundation\Response as HttpCode;
@@ -41,7 +43,9 @@ class RegistrationFrontController extends Controller
     public function saveRegistration()
     {
         try {
-            $aResult = $this->oRegistrationService->createRegistration(request()->all());
+            RegistrationValidator::validate(request());
+            $oModel = new RegistrationModel();
+            $aResult = $this->oRegistrationService->createRegistration(request()->only($oModel->getFillable()));
             return Response::formatSuccessResponse($aResult['message'], $aResult['data'], $aResult['code']);
         } catch (\Throwable $oException) {
             return Response::formatErrorResponse($oException);

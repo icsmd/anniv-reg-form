@@ -10,7 +10,7 @@
           <div class="admin-form theme-info mw500" id="login">
             <!-- Login Logo -->
             <div class="row table-layout" style="text-align: center; font-size: 40px;">
-              SCMS
+              Registration Form Management
             </div>
 
             <!-- Login Panel/Form -->
@@ -56,7 +56,6 @@
             <!-- Registration Links -->
             <div class="login-links">
               <p>
-                <a href="pages_forgotpw(alt).html" class="active" title="Sign In">Forgot Password?</a>
               </p>
             </div>
           </div>
@@ -68,7 +67,6 @@
   </div>
 </template>
 <script>
-import Swal from 'sweetalert2';
 import HttpRequest from "../../libraries/request.js"
 import Utilities from "../../libraries/utilities.js"
 export default {
@@ -82,8 +80,11 @@ export default {
       sPassword: ''
     }
   },
+  created () {
+    document.title = 'RFM';
+  },
   mounted() {
-    // this.$root.clearLocalStorage();
+    this.$root.clearLocalStorage();
     this.initializeActions();
   },
   methods: {

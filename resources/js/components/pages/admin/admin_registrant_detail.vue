@@ -10,7 +10,7 @@
         <!-- Input Fields -->
         <div class="panel">
             <div class="panel-heading">
-                <span class="panel-title">Manage Registrants</span>
+                <span class="panel-title">Manage Registrants > Details</span>
             </div>
             <div class="panel-body">
 
@@ -20,23 +20,55 @@
                     <div class="panel-heading ">
                         <div class="panel-title hidden-xs">
                             <span class="fa fa-list"></span>Registrant Detail
+                            <button id="btnBackToList" class="button btn-md btn-warning mr10 pull-right">
+                                <i class="fa fa-arrow-left"></i>
+                                Back to List
+                            </button>
                         </div>
                     </div>
                     <div class="panel-body pn">
                         <div class="col-md-5">
-                            <img :src="aRegistrant.picture" width="400px" height="400px" style="margin: 5%">
+                            <img :src="aRegistrant.picture" width="400px" height="400px" style="margin: 4%">
                         </div>
                         <div class="col-md-7">
-                            <table>
-                            <tbody>
-                                <tr>
-                                    <td>Name: </td>
-                                    <td>{{ aRegistrant.salutation }} {{ aRegistrant.first_name }} {{ aRegistrant.middle_initial }} {{  aRegistrant.last_name }}</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                            <table style="color: #666666; font-size: 18px; border: 1px solid #eeeeee; margin-top: 4%;"
+                                class="table table-bordered">
+                                <tbody>
+                                    <tr>
+                                        <td width="30%" style="background-color: #eee;">Name: </td>
+                                        <td>{{ aRegistrant.salutation }} {{ aRegistrant.first_name }} {{
+                                aRegistrant.middle_initial }} {{ aRegistrant.last_name }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td width="30%" style="background-color: #eee;">Department/Agency:<br>
+                                            Office/Company: </td>
+                                        <td>{{ aRegistrant.department }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td width="30%" style="background-color: #eee;">Designation/Position:</td>
+                                        <td>{{ aRegistrant.designation }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td width="30%" style="background-color: #eee;">Registered As: <br>(Membership
+                                            Type)</td>
+                                        <td>{{ aRegistrant.membership }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td width="30%" style="background-color: #eee;">Email:</td>
+                                        <td>{{ aRegistrant.email }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td width="30%" style="background-color: #eee;">Contact No.:</td>
+                                        <td>{{ aRegistrant.contact_number }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td width="30%" style="background-color: #eee;">Submitted ID Code:</td>
+                                        <td>{{ aRegistrant.id_code}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
-                       
+
                     </div>
                 </div>
                 <!-- END: UACS TABLE -->
@@ -48,16 +80,24 @@
 export default {
     data() {
         return {
-           aRegistrant: []
+            aRegistrant: []
         }
     },
     mounted() {
+        this.initEventListeners();
         this.parseDetails();
     },
-    methods: { 
+    methods: {
+        initEventListeners: function () {
+            document.body.addEventListener('click', function (event) {
+                event.preventDefault();
+                if (event.target.id === 'btnBackToList') {
+                    window.location.href = '/admin/home';
+                }
+            }, false);
+        },
         parseDetails: function () {
             this.aRegistrant = JSON.parse(atob(this.$root.getLocalStorageValue('comp')))[0];
-            console.log(this.aRegistrant);
         },
     }
 }
@@ -67,4 +107,11 @@ export default {
 .error_msg_edit {
     color: red;
 }
-</style>    
+
+table,
+tbody,
+td,
+tr {
+    border: 1px solid rgba(213, 213, 213, 0.933) !important
+}
+</style>

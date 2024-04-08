@@ -17,7 +17,6 @@ class RegistrationModel extends Model {
         "middle_initial",
         "last_name",
         "salutation",
-        "suffix",
         "department",
         "designation",
         "contact_number",
@@ -25,7 +24,6 @@ class RegistrationModel extends Model {
         "id_code",
         "status",
         "mst_id",
-        "date_modified"
     ];
 
     public $searchable = [

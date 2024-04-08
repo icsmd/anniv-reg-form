@@ -5,12 +5,27 @@
       <!-- START: REGISTRATION FORM -->
       <div v-if="bFormSubmitted === false" class="panel panel-primary heading-border center-block col-md-8">
         <!-- START: REG FORM BODY -->
+        <div class="panel" style="background-image: url('../../../../img/phflag.jpg'); 
+          background-size: 100% 100%; 
+          height: 200px;
+          border: 0px">
+          <div style="margin: 3%; text-align: center">
+            <br>
+            <h1
+              style="color: #666666; font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif">
+              Anniversary Celebration</h1>
+            <h3
+              style="color: #666666; font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif">
+              Registration Form</h3>
+          </div>
+        </div>
+        <p style="text-align: justify; margin: 2%;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;By answering this web form, you
+          are confirming your attendance on the upcoming anniversary celebration
+          event. Rest assured that the information you will provide will be handled and protected in accordance to
+          R.A. 10173.
+        </p>
         <div class="panel-body ">
           <!-- START: SECTION DIVIDER -->
-          <div class="section-divider mt20 mb40">
-            <span> Normal validation rules </span>
-          </div>
-          <!-- END: SECTION DIVIDER -->
 
           <!-- START: EMAIL INPUT -->
           <div class="row">
@@ -20,10 +35,17 @@
                 <label for="inp_email" class="field prepend-icon">
                   <input type="text" name="inp_email" id="inp_email" class="gui-input"
                     placeholder="e.g., juandelacruz@gmail.com ">
+                  <b class="tooltip tip-left-bottom">
+                    <em>The email you will provide will be used to receive the qr-code we'll be sending, which you will
+                      present on the day of the event.
+                    </em>
+                  </b>
                   <label for="inp_email" class="field-icon">
                     <i class="fa fa-envelope"></i>
                   </label>
                 </label>
+                <span v-if="sEmailValidStat === 'false'" style="margin-top: 5%; font-size: 13px; color: red">Note: You
+                  must validate your email first in order to proceed to the next fields.</span>
               </div>
               <div class="col-md-6 custom-margin">
                 <button v-if="sEmailValidStat === 'false'" id="btnValidateEmail" class="button btn-primary">
@@ -31,167 +53,194 @@
                 </button>
                 <p v-else-if="sEmailValidStat === 'pending'" id="p_email_validating" style="margin-top: 10px">
                   <i class="fa fa-spinner"></i>&nbsp;
-                  Validating... Please wait.</p>
+                  Validating... Please wait.
+                </p>
                 <p v-else id="p_email_valid" style="margin-top: 10px">
                   <i class="fa fa-check-circle"></i>&nbsp;
-                  Email is valid.</p>
+                  Email is valid.
+                </p>
               </div>
             </div>
           </div>
-          <!-- START: SALUTATION INPUT -->
-          <div class="row">
-            <label class="col-md-12 custom-label">Salutation: <span class="required">*</span></label>
-            <div class="col-md-12">
-              <div class="col-md-12 custom-margin">
-                <label for="inp_salute" class="field prepend-icon">
-                  <input type="text" name="inp_salute" id="inp_salute" class="gui-input"
-                    placeholder="e.g., Mr., Ms., Mrs., Dr., Ret Gen., etc.">
-                  <label for="inp_salute" class="field-icon">
-                    <i class="fa fa-envelope"></i>
+
+          <div id="div_main_form" style="display:none">
+            <!-- START: SALUTATION INPUT -->
+            <div class="row">
+              <label class="col-md-12 custom-label">Salutation: <span class="required">*</span></label>
+              <div class="col-md-12">
+                <div class="col-md-12 custom-margin">
+                  <label for="inp_salute" class="field prepend-icon">
+                    <input type="text" name="inp_salute" id="inp_salute" class="gui-input"
+                      placeholder="e.g., MR., MS., MRS., DR., RET GEN., etc." style="text-transform: uppercase">
+                    <label for="inp_salute" class="field-icon">
+                      <i class="fa fa-envelope"></i>
+                    </label>
                   </label>
-                </label>
-              </div>
-            </div>
-          </div>
-          <!-- START: FIRST NAME INPUT -->
-          <div class="row">
-            <label class="col-md-12 custom-label">First Name: <span class="required">*</span></label>
-            <div class="col-md-12">
-              <div class="col-md-12 custom-margin">
-                <label for="inp_fname" class="field prepend-icon">
-                  <input type="text" name="inp_fname" id="inp_fname" class="gui-input" placeholder="e.g., Juan">
-                  <label for="inp_fname" class="field-icon">
-                    <i class="fa fa-user"></i>
-                  </label>
-                </label>
-              </div>
-            </div>
-          </div>
-          <!-- START: MIDDLE INITIAL INPUT -->
-          <div class="row">
-            <label class="col-md-12 custom-label">Middle Initial: </label>
-            <div class="col-md-12">
-              <div class="col-md-12 custom-margin">
-                <label for="inp_minitial" class="field prepend-icon">
-                  <input type="text" name="inp_minitial" id="inp_minitial" class="gui-input" placeholder="e.g., G.">
-                  <label for="inp_minitial" class="field-icon">
-                    <i class="fa fa-user"></i>
-                  </label>
-                </label>
-              </div>
-            </div>
-          </div>
-          <!-- START: LAST NAME INPUT -->
-          <div class="row">
-            <label class="col-md-12 custom-label">Last Name: <span class="required">*</span></label>
-            <div class="col-md-12">
-              <div class="col-md-12 custom-margin">
-                <label for="inp_lname" class="field prepend-icon">
-                  <input type="text" name="inp_lname" id="inp_lname" class="gui-input" placeholder="e.g., Dela Cruz">
-                  <label for="inp_lname" class="field-icon">
-                    <i class="fa fa-user"></i>
-                  </label>
-                </label>
-              </div>
-            </div>
-          </div>
-          <!-- START: DEPARTMENT INPUT -->
-          <div class="row">
-            <label class="col-md-12 custom-label">Department/Agency/Office/Embassy: <span
-                class="required">*</span></label>
-            <div class="col-md-12">
-              <div class="col-md-12 custom-margin">
-                <label for="inp_dept" class="field prepend-icon">
-                  <input type="text" name="inp_dept" id="inp_dept" class="gui-input"
-                    placeholder="e.g., Department of Justice, Bureau of Customs, Philippine National Police, etc.">
-                  <label for="inp_dept" class="field-icon">
-                    <i class="fa fa-building"></i>
-                  </label>
-                </label>
-              </div>
-            </div>
-          </div>
-          <!-- START: DESIGNATION INPUT -->
-          <div class="row">
-            <label class="col-md-12 custom-label">Designation/Position: <span class="required">*</span></label>
-            <div class="col-md-12">
-              <div class="col-md-12 custom-margin">
-                <label for="inp_desig" class="field prepend-icon">
-                  <input type="text" name="inp_desig" id="inp_desig" class="gui-input"
-                    placeholder="e.g., Police/Military Officer, Consultant, Director, etc.">
-                  <label for="inp_desig" class="field-icon">
-                    <i class="fa fa-suitcase"></i>
-                  </label>
-                </label>
-              </div>
-            </div>
-          </div>
-          <!-- START: MEMBERSHIP INPUT -->
-          <div class="row">
-            <label class="col-md-12 custom-label">Membership: <span class="required">*</span></label>
-            <div class="col-md-12">
-              <div class="form-group">
-                <div class="col-lg-12 custom-margin">
-                  <select class="select2-single form-control mst-select" id="inp_mst">
-                    <option disabled value="" selected>Please select membership</option>
-                    <option v-for="item in aMstList" :value="item.mst_id">{{ item.mst_desc }}</option>
-                  </select>
                 </div>
               </div>
             </div>
-          </div>
-          <!-- START: CONTACT NUMBER -->
-          <div class="row">
-            <label class="col-md-12 custom-label">Contact Number: <span class="required">*</span></label>
-            <div class="col-md-12">
-              <div class="col-md-12 custom-margin">
-                <label for="inp_contact" class="field prepend-icon">
-                  <input type="text" name="inp_contact" id="inp_contact" class="gui-input"
-                    placeholder="e.g., 09123456789">
-                  <label for="inp_contact" class="field-icon">
-                    <i class="fa fa-mobile"></i>
+            <!-- START: FIRST NAME INPUT -->
+            <div class="row">
+              <label class="col-md-12 custom-label">First Name: <span class="required">*</span></label>
+              <div class="col-md-12">
+                <div class="col-md-12 custom-margin">
+                  <label for="inp_fname" class="field prepend-icon">
+                    <input type="text" name="inp_fname" id="inp_fname" class="gui-input" placeholder="e.g., JUAN"
+                      style="text-transform: uppercase" />
+                    <label for="inp_fname" class="field-icon">
+                      <i class="fa fa-user"></i>
+                    </label>
                   </label>
-                </label>
+                </div>
               </div>
             </div>
-          </div>
-          <!-- START: UPLOAD PICTURE -->
-          <div class="row">
-            <label class="col-md-12 custom-label">Upload Picture: <span class="required">*</span></label>
-            <div class="col-md-12">
+            <!-- START: MIDDLE INITIAL INPUT -->
+            <div class="row">
+              <label class="col-md-12 custom-label">Middle Initial: </label>
               <div class="col-md-12">
-                <div class="section">
-                  <label class="field prepend-icon append-button file">
-                    <span class="button btn-primary">Choose File</span>
-                    <input type="file" class="gui-file" name="inp_picture" id="inp_picture">
-                    <input type="text" class="gui-input" id="inp_pic_name_preview" placeholder="Please Select A File">
-                    <label class="field-icon">
-                      <i class="fa fa-upload"></i>
+                <div class="col-md-12 custom-margin">
+                  <label for="inp_minitial" class="field prepend-icon">
+                    <input type="text" name="inp_minitial" id="inp_minitial" class="gui-input" placeholder="e.g., G"
+                      style="text-transform: uppercase;" maxlength="1" />
+                    <label for="inp_minitial" class="field-icon">
+                      <i class="fa fa-user"></i>
+                    </label>
+                  </label>
+                </div>
+              </div>
+            </div>
+            <!-- START: LAST NAME INPUT -->
+            <div class="row">
+              <label class="col-md-12 custom-label">Last Name: <span class="required">*</span></label>
+              <div class="col-md-12">
+                <div class="col-md-12 custom-margin">
+                  <label for="inp_lname" class="field prepend-icon">
+                    <input type="text" name="inp_lname" id="inp_lname" class="gui-input" placeholder="e.g., DELA CRUZ"
+                      style="text-transform: uppercase;">
+                    <label for="inp_lname" class="field-icon">
+                      <i class="fa fa-user"></i>
+                    </label>
+                  </label>
+                </div>
+              </div>
+            </div>
+            <!-- START: DEPARTMENT INPUT -->
+            <div class="row">
+              <label class="col-md-12 custom-label">Department/Agency/Office/Embassy: <span
+                  class="required">*</span></label>
+              <div class="col-md-12">
+                <div class="col-md-12 custom-margin">
+                  <label for="inp_dept" class="field prepend-icon">
+                    <input type="text" name="inp_dept" id="inp_dept" class="gui-input"
+                      placeholder="e.g., DEPARTMENT OF JUSTICE, BUREAU OF CUSTOMS, PHILIPPINE NATIONAL POLICE, etc."
+                      style="text-transform: uppercase;">
+                    <label for="inp_dept" class="field-icon">
+                      <i class="fa fa-building"></i>
+                    </label>
+                  </label>
+                </div>
+              </div>
+            </div>
+            <!-- START: DESIGNATION INPUT -->
+            <div class="row">
+              <label class="col-md-12 custom-label">Designation/Position: <span class="required">*</span></label>
+              <div class="col-md-12">
+                <div class="col-md-12 custom-margin">
+                  <label for="inp_desig" class="field prepend-icon">
+                    <input type="text" name="inp_desig" id="inp_desig" class="gui-input"
+                      placeholder="e.g., POLICE/MILITARY OFFICER, CONSULTANT, DIRECTOR, etc."
+                      style="text-transform: uppercase;">
+                    <label for="inp_desig" class="field-icon">
+                      <i class="fa fa-suitcase"></i>
+                    </label>
+                  </label>
+                </div>
+              </div>
+            </div>
+            <!-- START: MEMBERSHIP INPUT -->
+            <div class="row">
+              <label class="col-md-12 custom-label">Membership: <span class="required">*</span></label>
+              <div class="col-md-12">
+                <div class="form-group">
+                  <div class="col-lg-12 custom-margin">
+                    <select class="select2-single form-control mst-select" id="inp_mst">
+                      <option disabled value="" selected>Please select membership</option>
+                      <option v-for="item in aMstList" :value="item.mst_id">{{ item.mst_desc }}</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- START: CONTACT NUMBER -->
+            <div class="row">
+              <label class="col-md-12 custom-label">Contact Number: <span class="required">*</span></label>
+              <div class="col-md-12">
+                <div class="col-md-12 custom-margin">
+                  <label for="inp_contact" class="field prepend-icon">
+                    <input type="text" name="inp_contact" id="inp_contact" class="gui-input"
+                      placeholder="e.g., 09123456789" minlength="11" maxlength="11" />
+                    <b class="tooltip tip-left-bottom">
+                      <em>The contact number may be used to contact you for identity confirmation. <br>
+                        (Must be a valid 11-digit number)
+                      </em>
+                    </b>
+                    <label for="inp_contact" class="field-icon">
+                      <i class="fa fa-mobile"></i>
+                    </label>
+                  </label>
+                </div>
+              </div>
+            </div>
+            <!-- START: UPLOAD PICTURE -->
+            <div class="row">
+              <label class="col-md-12 custom-label">Upload Picture: <span class="required">*</span></label>
+              <div class="col-md-12">
+                <div class="col-md-12">
+                  <div class="section">
+                    <label class="field prepend-icon append-button file">
+                      <span class="button btn-primary">Choose File</span>
+                      <input type="file" class="gui-file" name="inp_picture" id="inp_picture">
+                      <input type="text" class="gui-input" id="inp_pic_name_preview" placeholder="Please Select A File">
+                      <b class="tooltip tip-left-bottom">
+                        <em>The picture you will provide will be used to validate your identification. <br>
+                          (Must be a valid jpg, jpeg, and png file)
+                        </em>
+                      </b>
+                      <label class="field-icon">
+                        <i class="fa fa-upload"></i>
+                      </label>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- START: ID CODE INPUT -->
+            <div class="row">
+              <label class="col-md-12 custom-label">ID Code: <span class="required">*</span></label>
+              <div class="col-md-12">
+                <div class="col-md-12 custom-margin">
+                  <label for="inp_idcode" class="field prepend-icon">
+                    <input type="text" name="inp_idcode" id="inp_idcode" class="gui-input" placeholder="e.g., 12345"
+                      minlength="5" maxlength="5">
+                    <b class="tooltip tip-left-bottom">
+                      <em>The ID code comes from invitation that was sent to you via email. <br>
+                        (Must be a 5-digit number)
+                      </em>
+                    </b>
+                    <label for="inp_idcode" class="field-icon">
+                      <i class="fa fa-code"></i>
                     </label>
                   </label>
                 </div>
               </div>
             </div>
           </div>
-          <!-- START: ID CODE INPUT -->
-          <div class="row">
-            <label class="col-md-12 custom-label">ID Code: <span class="required">*</span></label>
-            <div class="col-md-12">
-              <div class="col-md-12 custom-margin">
-                <label for="inp_idcode" class="field prepend-icon">
-                  <input type="text" name="inp_idcode" id="inp_idcode" class="gui-input" placeholder="e.g., 12345">
-                  <label for="inp_idcode" class="field-icon">
-                    <i class="fa fa-code"></i>
-                  </label>
-                </label>
-              </div>
-            </div>
-          </div>
+
         </div>
         <!-- END: REG FORM BODY -->
 
         <!-- START: REG FORM FOOTER -->
-        <div class="panel-footer text-right">
+        <div class="panel-footer text-right" id="div_footer_form" style="display:none">
           <button type="reset" id="btnClearForm" class="button">
             <i class="fa fa-undo"></i> &nbsp;
             Clear All
@@ -203,6 +252,7 @@
           </button>
         </div>
         <!-- END: REG FORM FOOTER -->
+
       </div>
       <!-- END: REGISTRATION FORM -->
 
@@ -244,6 +294,7 @@
 
 </template>
 <script>
+import Swal from 'sweetalert2';
 import HttpRequest from '../../../libraries/request';
 export default {
   mixins: [
@@ -269,11 +320,24 @@ export default {
       bFormSubmitted: false,
       sConvertedImage: '',
       aSubmitResult: [],
+      sTempEmailValue: '',
     }
   },
   created() {
     this.sActivePage = 'registration';
     document.title = 'Anniversary Celebration Registration'
+  },
+  watch: {
+    sEmailValidStat(sValid) {
+      if (sValid === 'valid') {
+        $('#div_main_form').css('display', '');
+        $('#div_footer_form').css('display', '');
+        $('.mst-select').select2();
+      } else if ('false') {
+        $('#div_main_form').css('display', 'none');
+        $('#div_footer_form').css('display', 'none');
+      }
+    }
   },
   mounted() {
     this.getMstList();
@@ -283,7 +347,6 @@ export default {
     getMstList: function () {
       this.getRequest('get-mst', (mResponse) => {
         this.aMstList = mResponse.data;
-        $('.mst-select').select2();
       });
     },
 
@@ -301,6 +364,29 @@ export default {
           mSelf.submitForm();
         }
       }, false);
+
+
+      $(this.sInpEmail).keyup(function (event) {
+        event.preventDefault();
+        if (mSelf.sEmailValidStat === 'valid') {
+          Swal.fire({
+            title: "Wait!",
+            text: "By changing the email, you need to revalidate the email once again and you won't be able to submit your entries until it's validated (Your progress will be saved). Are you sure you want to proceed?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, I want to proceed."
+          }).then((result) => {
+            if (result.isConfirmed) {
+              mSelf.sEmailValidStat = 'false';
+              $(mSelf.sInpEmail).css('background-color', '#ffffff');
+            } else {
+              $(mSelf.sInpEmail).val(mSelf.sTempEmailValue);
+            }
+          });
+        }
+      });
     },
 
     getImageUpload: function () {
@@ -343,11 +429,12 @@ export default {
       const aAllowedFileTypes = ['image/png', 'image/jpg', 'image/jpeg'];
       let bResult = true;
       let sMessage = 'Successfully validated the file.';
-
       if (iFileSizeLimitMb <= fFileSizeMb) {
         bResult = false;
         sMessage = 'The file size must not exceed 5 MB!'
-      } else if (aAllowedFileTypes.some(str => str.includes(sFileType)) !== true) {
+      }
+
+      if (aAllowedFileTypes.some(str => str.includes(sFileType)) !== true || sFileType === '') {
         bResult = false;
         sMessage = 'The accepted file types that are .jpg, .jpeg, and .png only!';
       }
@@ -358,24 +445,33 @@ export default {
 
     validateEmail: function () {
       let sEmail = $(this.sInpEmail).val();
-      $(this.sInpEmail).css('background-color', '#ffcbcb');
-      if (sEmail === '') {
-        this.showErrorAlert('Email is required!')
+      if (this.sTempEmailValue !== '' && this.sEmail === this.sTempEmailValue) {
+        $(this.sInpEmail).css('background-color', '#c3ffd6');
+        this.sEmailValidStat = 'valid';
+        this.sTempEmailValue = sEmail;
       } else {
-        this.sEmailValidStat = 'pending';
-        this.postRequest('validate-email', { email: sEmail }, (mResponse) => {
-          if (mResponse.code !== 500) {
-            $(this.sInpEmail).css('background-color', '#c3ffd6');
-            this.sEmailValidStat = 'valid';
-          } else {
-            this.sEmailValidStat = 'false';
-          }
-
-        });
+        if (sEmail === '') {
+          this.showErrorAlert('Email is required!');
+          $(this.sInpEmail).css('background-color', '#ffcbcb');
+        } else {
+          this.sEmailValidStat = 'pending';
+          this.sActiveAction = 'email_verify';
+          this.postRequest('validate-email', { email: sEmail }, (mResponse) => {
+            if (mResponse.code !== 500) {
+              this.sEmailValidStat = 'valid';
+              this.sTempEmailValue = sEmail;
+              $(this.sInpEmail).css('background-color', '#c3ffd6');
+            } else {
+              this.sEmailValidStat = 'false';
+              $(this.sInpEmail).css('background-color', '#ffcbcb');
+            }
+          });
+        }
       }
     },
 
     validateForm: function () {
+      let mSelf = this;
       let aInputFields = [
         this.sInpSalute,
         this.sInpFname,
@@ -391,20 +487,52 @@ export default {
       let aValidationResults = [];
       aInputFields.forEach(element => {
         let oInpElement = $(element);
-        if (oInpElement.val() === '' || oInpElement.val() === null) {
-          oInpElement.css('background-color', '#ffcbcb');
-          aValidationResults.push('false');
+        if (element !== mSelf.sInpMInitial) {
+          if (oInpElement.val() === '' || oInpElement.val() === null) {
+            oInpElement.css('background-color', '#ffcbcb');
+            aValidationResults.push('false');
+          } else {
+            oInpElement.css('background-color', '#c3ffd6');
+            aValidationResults.push('true');
+          }
         } else {
-          oInpElement.css('background-color', '#c3ffd6');
-          aValidationResults.push('true');
+          if (oInpElement.val() !== '') {
+            oInpElement.css('background-color', '#c3ffd6');
+          }
         }
       });
+
+
+
+
+      return aValidationResults.some(str => str.includes('false'));
+    },
+
+    validateFormByValue: function () {
+      let aValidationResults = [];
+      if ($(this.sInpContact).val().length != 11) {
+        $(this.sInpContact).css('background-color', '#ffcbcb');
+        aValidationResults.push('false');
+      } else {
+        $(this.sInpContact).css('background-color', '#c3ffd6');
+        aValidationResults.push('true');
+      }
+
+      if ($(this.sInpIdCode).val().length != 5) {
+        $(this.sInpIdCode).css('background-color', '#ffcbcb');
+        aValidationResults.push('false');
+      } else {
+        $(this.sInpIdCode).css('background-color', '#c3ffd6');
+        aValidationResults.push('true');
+      }
+
       return aValidationResults.some(str => str.includes('false'));
     },
 
     submitForm: function () {
       let bFormNotValid = this.validateForm();
-      if (bFormNotValid === true) {
+      let bFormValueNotValid = this.validateFormByValue();
+      if (bFormNotValid === true && bFormValueNotValid === true) {
         this.showErrorAlert('Please double check and correct your entries!');
       } else {
         let oParams = {
@@ -413,7 +541,6 @@ export default {
           'middle_initial': $(this.sInpMInitial).val(),
           'last_name': $(this.sInpLname).val(),
           'salutation': $(this.sInpSalute).val(),
-          // 'suffix': $(this.oInpSalute).val(),
           'department': $(this.sInpDept).val(),
           'designation': $(this.sInpDesig).val(),
           'contact_number': $(this.sInpContact).val(),
@@ -421,6 +548,7 @@ export default {
           'picture': this.sConvertedImage,
           'mst_id': $(this.sInpMst).val(),
         };
+        this.sActiveAction = 'form_validate';
         this.postRequest('submit-form', oParams, (mResponse) => {
           if (mResponse.code === 201) {
             this.bFormSubmitted = true;

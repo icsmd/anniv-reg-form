@@ -21,7 +21,7 @@ const C_ADMIN_Dashboard = import('./components/pages/admin/admin_dashboard.vue')
 const C_ADMIN_Registrant_Detail = import('./components/pages/admin/admin_registrant_detail.vue')
 
 // REPORTS - PRINTABLES
-const P_GEN_report_print_liquidation = import('./components/printable/printable_report_liquidation.vue')
+const P_GEN_report_print_list = import('./components/printable/printable_list.vue')
 
 // Define route paths
 const routes = [
@@ -34,6 +34,7 @@ const routes = [
     children: [
       { path: '', component: () => C_Login },
       { path: 'home', component: () => C_ADMIN_Dashboard },
+      { path: 'home/print', component: () => P_GEN_report_print_list },
       { path: 'registrant/details', component: () => C_ADMIN_Registrant_Detail },
     ]
   }

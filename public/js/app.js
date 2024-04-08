@@ -18766,7 +18766,7 @@ var C_ADMIN_Dashboard = __webpack_require__.e(/*! import() */ "resources_js_comp
 var C_ADMIN_Registrant_Detail = __webpack_require__.e(/*! import() */ "resources_js_components_pages_admin_admin_registrant_detail_vue").then(__webpack_require__.bind(__webpack_require__, /*! ./components/pages/admin/admin_registrant_detail.vue */ "./resources/js/components/pages/admin/admin_registrant_detail.vue"));
 
 // REPORTS - PRINTABLES
-var P_GEN_report_print_liquidation = __webpack_require__.e(/*! import() */ "resources_js_components_printable_printable_report_liquidation_vue").then(__webpack_require__.bind(__webpack_require__, /*! ./components/printable/printable_report_liquidation.vue */ "./resources/js/components/printable/printable_report_liquidation.vue"));
+var P_GEN_report_print_list = __webpack_require__.e(/*! import() */ "resources_js_components_printable_printable_list_vue").then(__webpack_require__.bind(__webpack_require__, /*! ./components/printable/printable_list.vue */ "./resources/js/components/printable/printable_list.vue"));
 
 // Define route paths
 var routes = [{
@@ -18790,6 +18790,11 @@ var routes = [{
     path: 'home',
     component: function component() {
       return C_ADMIN_Dashboard;
+    }
+  }, {
+    path: 'home/print',
+    component: function component() {
+      return P_GEN_report_print_list;
     }
   }, {
     path: 'registrant/details',
@@ -19175,7 +19180,8 @@ __webpack_require__.r(__webpack_exports__);
   mixins: [_utilities_js__WEBPACK_IMPORTED_MODULE_0__["default"]],
   data: function data() {
     return {
-      sActivePage: ''
+      sActivePage: '',
+      sActiveAction: ''
     };
   },
   methods: {
@@ -19222,7 +19228,7 @@ __webpack_require__.r(__webpack_exports__);
       var sResponseMsg = mResponse.response.data.message;
       var sFinalMessage = sResponseMsg === null ? sDefaultMsg : sResponseMsg;
       this.showErrorAlert(sFinalMessage);
-      if (this.sActivePage === 'registration') {
+      if (this.sActivePage === 'registration' && this.sActiveAction === 'email_verify') {
         this.sEmailValidStat = 'false';
       }
     }
@@ -56852,7 +56858,7 @@ function useRoute() {
 /******/ 		// This function allow to reference async chunks
 /******/ 		__webpack_require__.u = (chunkId) => {
 /******/ 			// return url for filenames not based on template
-/******/ 			if ({"resources_js_components_pages_login_vue":1,"resources_js_components_pages_utilities_404_vue":1,"resources_js_components_pages_public_registration_vue":1,"resources_js_components_pages_admin_admin_dashboard_vue":1,"resources_js_components_pages_admin_admin_registrant_detail_vue":1,"resources_js_components_printable_printable_report_liquidation_vue":1}[chunkId]) return "js/" + chunkId + ".js";
+/******/ 			if ({"resources_js_components_pages_login_vue":1,"resources_js_components_pages_utilities_404_vue":1,"resources_js_components_pages_public_registration_vue":1,"resources_js_components_pages_admin_admin_dashboard_vue":1,"resources_js_components_pages_admin_admin_registrant_detail_vue":1,"resources_js_components_printable_printable_list_vue":1}[chunkId]) return "js/" + chunkId + ".js";
 /******/ 			// return url for filenames based on template
 /******/ 			return undefined;
 /******/ 		};

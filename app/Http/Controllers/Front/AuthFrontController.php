@@ -16,24 +16,13 @@ class AuthFrontController extends Controller
         $this->oAuthService = new AuthService();
     }
 
-    // public function checkSession()
-    // {
-    //     $aSession = Session::getSession('u_session');
-    //     if ($aSession === null) {
-    //         return view('main');
-    //     } else {
-    //         $sSessionType = $aSession['user_type'];
-    //         return redirect("/front/$sSessionType/home");
-    //     }
-    // }
-
     public function getUserSession()
     {
         try {
             $aSession = Session::getSession('u_session');
             return Response::formatSuccessResponse('Successfully retrieved the session', [
-                'username'   => $aSession['username'],
-                'agency'    => $aSession['agency'],
+                'username'   => data_get($aSession, 'username', null),
+                'agency'    => data_get($aSession, 'agency', null)
             ]);
         } catch (\Throwable $oException) {
             return Response::formatErrorResponse($oException);

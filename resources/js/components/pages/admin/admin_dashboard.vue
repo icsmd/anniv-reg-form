@@ -13,10 +13,25 @@
                 <span class="panel-title">Manage Registrants</span>
             </div>
             <div class="panel-body">
-
-                <!-- START: UACS TABLE -->
+                <div class="panel panel-colorbox-open panel-system" id="spy2">
+                    <div class="panel-heading ">
+                        <div class="panel-title hidden-xs">
+                            <span class="fa fa-cogs"></span>Actions Available
+                        </div>
+                    </div>
+                    <div class="panel-body pn">
+                        <button id="btnPrintList" class="button btn-lg btn-success" style="margin: 10px">
+                            <i class="fa fa-file-pdf-o"></i>
+                            &nbsp;Print List
+                        </button>
+                        <button id="btnExportData" class="button btn-lg btn-primary" style="margin: 10px">
+                            <i class="fa fa-download"></i>
+                            &nbsp;Export Data
+                        </button>
+                    </div>
+                </div>
+                <!-- START: UREGISTRANTS LISTTABLE -->
                 <div class="panel panel-colorbox-open panel-dark" id="spy2">
-                    <br>
                     <div class="panel-heading ">
                         <div class="panel-title hidden-xs">
                             <span class="fa fa-list"></span>List of Registrants
@@ -33,7 +48,7 @@
                                     <th style="text-align: center;">Department/Agency</th>
                                     <th style="text-align: center;">Email</th>
                                     <th style="text-align: center;">Contact No.</th>
-                                    <th style="text-align: center;">Status</th>
+                                    <th style="text-align: center;">ID Code</th>
                                     <th style="text-align: center;">Action</th>
                                 </tr>
                             </thead>
@@ -41,12 +56,12 @@
                                 <tr v-for="item in aRecordList">
                                     <td style="text-align: center;">{{ item.reg_no }}</td>
                                     <td style="text-align: center;">{{ nullCheck(item.date_created, 'date') }} </td>
-                                    <td style="text-align: left;">{{ item.last_name}}</td>
+                                    <td style="text-align: left;">{{ item.last_name }}</td>
                                     <td style="text-align: left;">{{ item.first_name }}</td>
                                     <td style="text-align: left;">{{ item.department }}</td>
                                     <td style="text-align: left;">{{ item.email }}</td>
                                     <td style="text-align: left;">{{ item.contact_number }}</td>
-                                    <td style="text-align: left;">{{ item.status }}</td>
+                                    <td style="text-align: left;">{{ item.id_code }}</td>
                                     <td style="text-align: center;">
                                         <button type="button" data-action="viewDetails" :data-id="item.reg_no"
                                             class="btn btn-md btn-primary viewDetails" style="margin-right: 9%;">
@@ -59,7 +74,7 @@
                         </table>
                     </div>
                 </div>
-                <!-- END: UACS TABLE -->
+                <!-- END: REGISTRANTS LIST TABLE -->
             </div>
         </div>
     </section>
@@ -107,7 +122,7 @@ export default {
         this.getRecordList();
         this.initEventListeners();
     },
-    methods: { 
+    methods: {
         initEventListeners: function () {
             let mSelf = this;
             document.body.addEventListener('click', function (event) {
@@ -119,7 +134,56 @@ export default {
                     mSelf.$root.setLocalStorageValue('comp', sCompressed);
                     window.location.href = '/admin/registrant/details';
                 }
+                if (event.target.id === 'btnPrintList') {
+                    mSelf.printList();
+                }
+                if (event.target.id === 'btnExportData') {
+                    mSelf.createCsv();
+                }
             }, false);
+        },
+
+        createCsv: function () {
+            const titleKeys = [
+                "reg_no",
+                "email",
+                "first_name",
+                "middle_initial",
+                "last_name",
+                "salutation",
+                "department",
+                "designation",
+                "membership",
+                "guest_of",
+                "contact_number",
+                "file_type",
+                "picture",
+                "id_code",
+                "status",
+                "date_created",
+                "date_modified"]
+            const refinedData = [];
+            refinedData.push(titleKeys);
+            this.aRecordList.forEach(item => {
+                refinedData.push(Object.values(item))
+            });
+            let csvContent = ''
+            refinedData.forEach(row => {
+                csvContent += row.join(',') + '\n'
+            });
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8,' })
+            const objUrl = URL.createObjectURL(blob)
+            const link = document.createElement('a')
+            const filename = 'exported-list-' + moment().format('YYYYMMDDHHMMss') + '.csv';
+            link.setAttribute('href', objUrl)
+            link.setAttribute('download', filename)
+            link.click();
+        },
+
+        printList: function () {
+            let sCompressedSummary = JSON.stringify(this.aRecordList);
+            this.$root.setLocalStorageValue('forEx', sCompressedSummary);
+            window.open('home/print', '_blank');
         },
 
         getRecordList: function () {
@@ -131,6 +195,7 @@ export default {
                 }, 1000);
             });
         },
+
         initTblRecords: function () {
             $('#tbl_records').DataTable(this.aTableConfig);
             $('.dataTables_filter input').attr("placeholder", "Enter Terms...");
@@ -143,4 +208,4 @@ export default {
 .error_msg_edit {
     color: red;
 }
-</style>    
+</style>
