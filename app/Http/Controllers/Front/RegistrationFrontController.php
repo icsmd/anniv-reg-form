@@ -55,7 +55,9 @@ class RegistrationFrontController extends Controller
     public function getRegistrationList()
     {
         try {
-            $aResult = $this->oRegistrationService->getRegistrationList(request()->all());
+            $sStartDate = request()->input('start_date');
+            $sEndDate = request()->input('end_date');
+            $aResult = $this->oRegistrationService->getRegistrationList($sStartDate, $sEndDate);
             return Response::formatSuccessResponse($aResult['message'], $aResult['data'], $aResult['code']);
         } catch (\Throwable $oException) {
             return Response::formatErrorResponse($oException);

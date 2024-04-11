@@ -20,14 +20,45 @@
                         </div>
                     </div>
                     <div class="panel-body pn">
-                        <button id="btnPrintList" class="button btn-lg btn-success" style="margin: 10px">
-                            <i class="fa fa-file-pdf-o"></i>
-                            &nbsp;Print List
+                        <div class="admin-form mw1000 left-block" style="margin-top: 10px;">
+                            <div class="col-lg-3">
+                                <label for="inputStandard" class="col-lg-12 control-label"><b>Start Date
+                                        (From)</b></label>
+                                <label for="datepicker1" class="field prepend-icon">
+                                    <input type="text" id="inpStartDate" name="inpStartDate" class="gui-input"
+                                        placeholder="Enter Start Date" readonly>
+                                    <label class="field-icon">
+                                        <i class="fa fa-calendar-o"></i>
+                                    </label>
+                                </label>
+                            </div>
+                            <div class="col-lg-3">
+                                <label for="inputStandard" class="col-lg-12 control-label"><b>End Date (To)</b></label>
+                                <label for="datepicker1" class="field prepend-icon">
+                                    <input type="text" id="inpEndDate" name="inpEndDate" class="gui-input"
+                                        placeholder="Enter End Date" readonly>
+                                    <label class="field-icon">
+                                        <i class="fa fa-calendar-o"></i>
+                                    </label>
+                                </label>
+                            </div>
+                        </div>
+                        <button id="btnFilterList" class="button btn-lg btn-system"
+                            style="margin: 10px; margin-top: 16px;">
+                            <i class="fa fa-refresh"></i>
+                            &nbsp;Filter List
                         </button>
-                        <button id="btnExportData" class="button btn-lg btn-primary" style="margin: 10px">
+                        <button id="btnExportData" class="button btn-lg btn-primary"
+                            style="margin: 10px; margin-top: 16px;">
                             <i class="fa fa-download"></i>
                             &nbsp;Export Data
                         </button>
+                        <button id="btnPrintList" class="button btn-lg btn-success"
+                            style="margin: 10px; margin-top: 16px;">
+                            <i class="fa fa-file-pdf-o"></i>
+                            &nbsp;Print List
+                        </button>
+
                     </div>
                 </div>
                 <!-- START: UREGISTRANTS LISTTABLE -->
@@ -48,6 +79,7 @@
                                     <th style="text-align: center;">Department/Agency</th>
                                     <th style="text-align: center;">Email</th>
                                     <th style="text-align: center;">Contact No.</th>
+                                    <th style="text-align: center;">Type</th>
                                     <th style="text-align: center;">ID Code</th>
                                     <th style="text-align: center;">Action</th>
                                 </tr>
@@ -60,8 +92,9 @@
                                     <td style="text-align: left;">{{ item.first_name }}</td>
                                     <td style="text-align: left;">{{ item.department }}</td>
                                     <td style="text-align: left;">{{ item.email }}</td>
-                                    <td style="text-align: left;">{{ item.contact_number }}</td>
-                                    <td style="text-align: left;">{{ item.id_code }}</td>
+                                    <td style="text-align: center;">{{ item.contact_number }}</td>
+                                    <td style="text-align: center;">{{ item.guest_of }}</td>
+                                    <td style="text-align: center;">{{ item.id_code }}</td>
                                     <td style="text-align: center;">
                                         <button type="button" data-action="viewDetails" :data-id="item.reg_no"
                                             class="btn btn-md btn-primary viewDetails" style="margin-right: 9%;">
@@ -80,6 +113,7 @@
     </section>
 </template>
 <script>
+import moment from "moment";
 import HttpRequest from "./../../../libraries/request"
 import Utilities from "./../../../libraries/utilities"
 export default {
@@ -95,7 +129,7 @@ export default {
                 ],
                 "aoColumnDefs": [{
                     'bSortable': false,
-                    'aTargets': [7]
+                    'aTargets': [9]
                 }],
                 "oLanguage": {
                     "oPaginate": {
@@ -118,11 +152,47 @@ export default {
             bUpdateData: false
         }
     },
+    created() {
+        document.title = 'RFM | Manage Registrants'
+    },
     mounted() {
+        this.initPlugins();
         this.getRecordList();
         this.initEventListeners();
     },
     methods: {
+        initPlugins: function () {
+            // Initialize datepicker for start date
+            $("#inpStartDate").datepicker({
+                prevText: '<i class="fa fa-chevron-left"></i>',
+                nextText: '<i class="fa fa-chevron-right"></i>',
+                showButtonPanel: false,
+                beforeShow: function (input, inst) {
+                    var newclass = 'admin-form';
+                    var themeClass = $(this).parents('.admin-form').attr('class');
+                    var smartpikr = inst.dpDiv.parent();
+                    if (!smartpikr.hasClass(themeClass)) {
+                        inst.dpDiv.wrap('<div class="' + themeClass + '"></div>');
+                    }
+                }
+            });
+             // Initialize datepicker for end date
+            $("#inpEndDate").datepicker({
+                prevText: '<i class="fa fa-chevron-left"></i>',
+                nextText: '<i class="fa fa-chevron-right"></i>',
+                showButtonPanel: false,
+                beforeShow: function (input, inst) {
+                    var newclass = 'admin-form';
+                    var themeClass = $(this).parents('.admin-form').attr('class');
+                    var smartpikr = inst.dpDiv.parent();
+                    if (!smartpikr.hasClass(themeClass)) {
+                        inst.dpDiv.wrap('<div class="' + themeClass + '"></div>');
+                    }
+                }
+            });
+            $('#inpStartDate').val(moment().format('MM/DD/YYYY'));
+            $('#inpEndDate').val(moment().format('MM/DD/YYYY'));
+        },
         initEventListeners: function () {
             let mSelf = this;
             document.body.addEventListener('click', function (event) {
@@ -133,6 +203,9 @@ export default {
                     let sCompressed = btoa(JSON.stringify(aSelectedReg));
                     mSelf.$root.setLocalStorageValue('comp', sCompressed);
                     window.location.href = '/admin/registrant/details';
+                }
+                if (event.target.id === 'btnFilterList') {
+                    mSelf.getRecordList();
                 }
                 if (event.target.id === 'btnPrintList') {
                     mSelf.printList();
@@ -188,12 +261,21 @@ export default {
 
         getRecordList: function () {
             let mSelf = this;
-            this.getRequest('get-reg-list', (mResponse) => {
-                this.aRecordList = mResponse.data;
-                setTimeout(function () {
-                    mSelf.initTblRecords();
-                }, 1000);
-            });
+            setTimeout(function () {
+                mSelf.getRequest('get-reg-list', (mResponse) => {
+                    mSelf.aRecordList = mResponse.data;
+                    let bIsDataTableActive = $.fn.dataTable.isDataTable('#tbl_records');
+                    if (bIsDataTableActive === true) {
+                        $('#tbl_records').DataTable().destroy();
+                    }
+                    setTimeout(function () {
+                        mSelf.initTblRecords();
+                    }, 500);
+                }, {
+                    start_date: moment($('#inpStartDate').val()).format('YYYY-MM-DD'),
+                    end_date: moment($('#inpEndDate').val()).format('YYYY-MM-DD'),
+                });
+            }, 500);
         },
 
         initTblRecords: function () {

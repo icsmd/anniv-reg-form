@@ -30,9 +30,11 @@ const routes = [
     path: '/front/404', component: () => C_404
   },
   {
+    path: '/login', component: () => C_Login
+  },
+  {
     path: '/admin',
     children: [
-      { path: '', component: () => C_Login },
       { path: 'home', component: () => C_ADMIN_Dashboard },
       { path: 'home/print', component: () => P_GEN_report_print_list },
       { path: 'registrant/details', component: () => C_ADMIN_Registrant_Detail },

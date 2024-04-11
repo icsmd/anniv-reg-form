@@ -81,7 +81,7 @@ export default {
     }
   },
   created () {
-    document.title = 'RFM';
+    document.title = 'RFM Admin';
   },
   mounted() {
     this.$root.clearLocalStorage();

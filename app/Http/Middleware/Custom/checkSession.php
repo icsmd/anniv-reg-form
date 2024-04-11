@@ -17,7 +17,7 @@ class checkSession
     public function handle(Request $request, Closure $next)
     {
         $sRequestPath = $request->getPathInfo();
-        $sUserType = Session::getSession('u_session.user_type');
+        $sUserType = Session::getSession('u_session.agency');
         if ($sUserType === null) {
             return redirect('/');
         } else {

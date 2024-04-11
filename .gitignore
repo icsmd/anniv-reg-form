@@ -6,6 +6,8 @@
 /storage/*.key
 /vendor
 composer.lock
+.env
+.env.local
 .env.backup
 .env.production
 .phpunit.result.cache

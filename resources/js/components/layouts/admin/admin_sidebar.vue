@@ -34,7 +34,7 @@
                         <span class="sidebar-title" data-comp="sidebar" :data-href="sHrefHome">Manage Registrants</span>
                     </a>
                 </li>
-                <li class="active" data-comp="logout">
+                <li data-comp="logout">
                     <a href="#" data-comp="logout">
                         <span class="fa fa-sign-out" data-comp="logout"></span>
                         <span class="sidebar-title" data-comp="logout">Log Out</span>
@@ -91,7 +91,7 @@ export default {
                 if (result.isConfirmed) {
                     this.postRequest('auth/log-out', {}, () => {
                         mSelf.$root.clearLocalStorage();
-                        window.location.replace('/admin');
+                        window.location.replace('/login');
                     });
                 }
             });

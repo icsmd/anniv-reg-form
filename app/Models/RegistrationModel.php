@@ -32,7 +32,6 @@ class RegistrationModel extends Model {
         "middle_initial",
         "last_name",
         "salutation",
-        "suffix",
         "department",
         "designation",
         "contact_number",

@@ -17,12 +17,15 @@ class RegistrationService
         return MembershipTypeApiResource::collection($oMstModel::all());
     }
 
-    public function getRegistrationList($aRequestParams)
+    public function getRegistrationList($sStartDate, $sEndDate)
     {
         $oRegistrationModel = new RegistrationModel();
+        $aResult = RegistrationApiResource::collection($oRegistrationModel::whereDate('date_created', '>=', $sStartDate)
+            ->whereDate('date_created', '<=', $sEndDate)
+            ->get());
         return [
             'code'    => Response::HTTP_OK,
-            'data'    => RegistrationApiResource::collection($oRegistrationModel::where($aRequestParams)->get()),
+            'data'    => $aResult,
             'message' => 'Successfully retrieved the registration list'
         ];
     }
@@ -32,7 +35,7 @@ class RegistrationService
         $oRegistrationModel = new RegistrationModel();
         return [
             'code'    => Response::HTTP_OK,
-            'data'    => $oRegistrationModel::where(['reg_no' => $iId])->get()->toArray(),
+            'data'    => $oRegistrationModel::where([ 'reg_no' => $iId ])->get()->toArray(),
             'message' => 'Successfully retrieved the registration details'
         ];
     }

@@ -24,7 +24,7 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   created: function created() {
-    document.title = 'RFM';
+    document.title = 'RFM Admin';
   },
   mounted: function mounted() {
     this.$root.clearLocalStorage();

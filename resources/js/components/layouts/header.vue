@@ -3,7 +3,7 @@
     <header class="navbar navbar-fixed-top navbar-shadow">
         <div class="navbar-branding">
             <a class="navbar-brand" style="padding-left: 35%;">
-                <b>ARFM</b>
+                <b>RFM</b>
             </a>
             <span id="toggle_sidemenu_l" class="ad ad-lines"></span>
         </div>

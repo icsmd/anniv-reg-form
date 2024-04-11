@@ -100,8 +100,8 @@
               <div class="col-md-12">
                 <div class="col-md-12 custom-margin">
                   <label for="inp_minitial" class="field prepend-icon">
-                    <input type="text" name="inp_minitial" id="inp_minitial" class="gui-input" placeholder="e.g., G"
-                      style="text-transform: uppercase;" maxlength="1" />
+                    <input type="text" name="inp_minitial" id="inp_minitial" class="gui-input" placeholder="e.g., G."
+                      style="text-transform: uppercase;" maxlength="3" />
                     <label for="inp_minitial" class="field-icon">
                       <i class="fa fa-user"></i>
                     </label>
@@ -282,8 +282,6 @@
                 further details of the said event. </p>
               <br>
               <p class="lh25 text-muted fs15">You may now close this page. </p>
-              <!-- <p class="text-right mt20"><button class="btn btn-primary btn-rounded ph40" type="button" onclick="window.close()">Close Page</button>
-            </p> -->
             </div>
           </div>
         </div>

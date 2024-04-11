@@ -61,12 +61,4 @@ class AuthService
             "agency"   => $aUserData['agency'],
         ]);
     }
-
-    // private function saveUserLog($iUserId)
-    // {
-    //     $oUserLogService = new UserLogService();
-    //     return $oUserLogService->createLog([
-    //         'user_id' => $iUserId
-    //     ]);
-    // }
 }

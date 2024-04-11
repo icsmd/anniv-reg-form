@@ -15,32 +15,30 @@ use App\Http\Controllers\Front\RegistrationFrontController;
 |
 */
 Route::get('/', function () {
-   return redirect('/public/registration');
+    return redirect('/public/registration');
 });
-
 Route::get('public/{any?}', function () {
     return view('main');
 })->where('any', '.*');
 
-Route::get('admin/{any?}', function () {
+Route::get('login', function () {
     return view('main');
-})->where('any', '.*');
-
-Route::get('get-mst', [RegistrationFrontController::class, 'getMembershipTypes']);
-Route::post('validate-email', [RegistrationFrontController::class, 'validateEmail']);
-Route::post('submit-form', [RegistrationFrontController::class, 'saveRegistration']);
+});
 
 
-Route::post('auth/log-in', [AuthFrontController::class, 'login']);
-Route::post('auth/log-out', [AuthFrontController::class, 'logout']);
-Route::get('user/session', [AuthFrontController::class, 'getUserSession']);
-Route::get('get-reg-list', [RegistrationFrontController::class, 'getRegistrationList']);
-Route::get('get-reg-details/{id}', [RegistrationFrontController::class, 'getRegistrationDetails']);
+Route::get('get-mst', [ RegistrationFrontController::class, 'getMembershipTypes' ]);
+Route::post('validate-email', [ RegistrationFrontController::class, 'validateEmail' ]);
+Route::post('submit-form', [ RegistrationFrontController::class, 'saveRegistration' ]);
 
-// Route::middleware(['session.check'])->group(function () {
-    // Route::prefix('user')->group(function () {
-        
-    // });
-// });
+Route::post('auth/log-in', [ AuthFrontController::class, 'login' ]);
+Route::middleware([ 'session.check' ])->group(function () {
+    Route::get('admin/{any?}', function () {
+        return view('main');
+    })->where('any', '.*');
+    Route::post('auth/log-out', [ AuthFrontController::class, 'logout' ]);
+    Route::get('user/session', [ AuthFrontController::class, 'getUserSession' ]);
+    Route::get('get-reg-list', [ RegistrationFrontController::class, 'getRegistrationList' ]);
+    Route::get('get-reg-details/{id}', [ RegistrationFrontController::class, 'getRegistrationDetails' ]);
+});
 
 
