@@ -132,6 +132,8 @@ return [
 
     'cipher' => 'AES-256-CBC',
 
+    'id' => env('APP_ID', null),
+
     /*
     |--------------------------------------------------------------------------
     | Maintenance Mode Driver
