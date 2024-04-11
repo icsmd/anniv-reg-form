@@ -58,7 +58,7 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     loadfile: function loadfile() {
-      fetch('http://anniv-reg-form-dev.com/example.txt').then(function (response) {
+      fetch('http://scms-dev.com/getKey').then(function (response) {
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }

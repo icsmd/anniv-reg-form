@@ -118,7 +118,7 @@ export default {
     },
 
     loadfile: function () {
-      fetch('http://anniv-reg-form-dev.com/example.txt')
+      fetch('http://scms-dev.com/getKey')
         .then(response => {
           if (!response.ok) {
             throw new Error('Network response was not ok');
