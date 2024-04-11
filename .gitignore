@@ -5,6 +5,7 @@
 /public/storage
 /public/example.txt
 /storage/*.key
+/public/error.log
 /vendor
 composer.lock
 .env
