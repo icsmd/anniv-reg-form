@@ -25,13 +25,12 @@ Route::get('login', function () {
     return view('main');
 });
 
-
 Route::get('get-mst', [ RegistrationFrontController::class, 'getMembershipTypes' ]);
 Route::post('validate-email', [ RegistrationFrontController::class, 'validateEmail' ]);
 Route::post('submit-form', [ RegistrationFrontController::class, 'saveRegistration' ]);
 
 Route::post('auth/log-in', [ AuthFrontController::class, 'login' ]);
-Route::middleware([ 'session.check' ])->group(function () {
+Route::middleware(['session.check'])->group(function () {
     Route::get('admin/{any?}', function () {
         return view('main');
     })->where('any', '.*');
@@ -40,5 +39,4 @@ Route::middleware([ 'session.check' ])->group(function () {
     Route::get('get-reg-list', [ RegistrationFrontController::class, 'getRegistrationList' ]);
     Route::get('get-reg-details/{id}', [ RegistrationFrontController::class, 'getRegistrationDetails' ]);
 });
-
 

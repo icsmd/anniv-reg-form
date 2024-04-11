@@ -11,6 +11,15 @@ export default {
         }
     },
     methods: {
+
+        /**
+         * Axios Get Request
+         * 
+         * @param {*} sUrl 
+         * @param {*} mThen 
+         * @param {*} oParam 
+         * @returns 
+         */
         getRequest: function (sUrl, mThen, oParam = []) {
             sUrl = '/' + sUrl;
             return new Promise((mResolve) => {
@@ -51,8 +60,11 @@ export default {
             });
         },
 
+        /**
+         * Catch error from http requests
+         * @param {*} mResponse 
+         */
         catchRequest: function (mResponse) {
-            
             let sDefaultMsg = mResponse.message;
             let sResponseMsg = mResponse.response.data.message;
             let sFinalMessage = sResponseMsg === null ? sDefaultMsg : sResponseMsg;

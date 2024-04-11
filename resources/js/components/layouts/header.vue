@@ -19,14 +19,6 @@
 </template>
 <script>
 export default {
-    data() {
-        return {
-    
-        }
-    },
-    created () {
-
-    },
     mounted() {
         this.$root.initializeTemplatePlugins();
     }

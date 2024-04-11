@@ -56,10 +56,17 @@ export default {
         this.printReport();
     },
     methods: {
+        /**
+         * Parse compressed data from temp storage
+         */
         parseCompressedData: function () {
             let sCompressedData = this.$root.getLocalStorageValue('forEx');
             this.aRecordList = JSON.parse(sCompressedData);
         },
+
+        /**
+         * Print report
+         */
         printReport: function () {
             var printContents = document.getElementById('printableDiv').outerHTML;
             var originalContents = document.body.innerHTML;

@@ -2,21 +2,37 @@
 
 namespace App\Services;
 
-use App\Libraries\HttpRequestHandlerLibrary as HttpReq;
+use App\Libraries\AppConstantsLibrary as AppConst;
 use App\Models\MembershipTypeModel;
 use App\Models\RegistrationModel;
 use App\Resources\MembershipTypeApiResource;
 use App\Resources\RegistrationApiResource;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * Class   : RegistrationService
+ * Author  : C.O.B
+ * Dated   : 04/11/24
+ * Version : 1.0
+ */
 class RegistrationService
 {
+    /**
+     * Retrieves the membership type list (Library)
+     * @return mixed
+     */
     public function getMembershipTypeList()
     {
         $oMstModel = new MembershipTypeModel();
         return MembershipTypeApiResource::collection($oMstModel::all());
     }
 
+    /**
+     * Retrieves the registration list 
+     * @param string $sStartDate
+     * @param string $sEndDate
+     * @return mixed|array
+     */
     public function getRegistrationList($sStartDate, $sEndDate)
     {
         $oRegistrationModel = new RegistrationModel();
@@ -24,22 +40,32 @@ class RegistrationService
             ->whereDate('date_created', '<=', $sEndDate)
             ->get());
         return [
-            'code'    => Response::HTTP_OK,
-            'data'    => $aResult,
-            'message' => 'Successfully retrieved the registration list'
+            AppConst::CODE    => Response::HTTP_OK,
+            AppConst::DATA    => $aResult,
+            AppConst::MESSAGE => 'Successfully retrieved the registration list'
         ];
     }
 
+    /**
+     * Retrieves specific registration details by id
+     * @param int $iId
+     * @return array
+     */
     public function getRegistrationDetails($iId)
     {
         $oRegistrationModel = new RegistrationModel();
         return [
-            'code'    => Response::HTTP_OK,
-            'data'    => $oRegistrationModel::where([ 'reg_no' => $iId ])->get()->toArray(),
-            'message' => 'Successfully retrieved the registration details'
+            AppConst::CODE    => Response::HTTP_OK,
+            AppConst::DATA    => $oRegistrationModel::where([ 'reg_no' => $iId ])->get()->toArray(),
+            AppConst::MESSAGE => 'Successfully retrieved the registration details'
         ];
     }
 
+    /** 
+     * Creates a registration record (Save to DB)
+     * @param array $aCreateParams
+     * @return mixed|array
+     */
     public function createRegistration($aCreateParams)
     {
         $oRegistrationModel = new RegistrationModel();
@@ -57,9 +83,9 @@ class RegistrationService
         $oRegistrationModel->insert($aCreateParams);
 
         return [
-            'code'    => Response::HTTP_CREATED,
-            'data'    => $oRegistrationModel::latest()->first(),
-            'message' => 'Successfully saved the registration details'
+            AppConst::CODE    => Response::HTTP_CREATED,
+            AppConst::DATA    => $oRegistrationModel::latest()->first(),
+            AppConst::MESSAGE => 'Successfully saved the registration details'
         ];
     }
 }

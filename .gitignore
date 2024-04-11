@@ -3,6 +3,7 @@
 /public/build
 /public/hot
 /public/storage
+/public/example.txt
 /storage/*.key
 /vendor
 composer.lock

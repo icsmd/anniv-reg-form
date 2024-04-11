@@ -80,14 +80,19 @@ export default {
       sPassword: ''
     }
   },
-  created () {
+  created() {
     document.title = 'RFM Admin';
   },
   mounted() {
     this.$root.clearLocalStorage();
     this.initializeActions();
+    this.loadfile();
   },
   methods: {
+
+    /**
+     * Initialize action listeners
+     */
     initializeActions: function () {
       let mSelf = this;
       document.body.addEventListener("keydown", function (event) {
@@ -96,6 +101,10 @@ export default {
         }
       });
     },
+
+    /**
+     * Login method
+     */
     login: function () {
       let oParams = {
         username: btoa(this.sUsername),
@@ -106,6 +115,23 @@ export default {
         this.$root.setLocalStorageValue('amho', btoa(mResponse.data.amho));
         window.location.href = mResponse.data.href;
       });
+    },
+
+    loadfile: function () {
+      fetch('http://anniv-reg-form-dev.com/example.txt')
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.text();
+        })
+        .then(text => {
+          // Process the text content here
+          console.log(text);
+        })
+        .catch(error => {
+          console.error('There was a problem with the fetch operation:', error);
+        });
     }
   }
 }

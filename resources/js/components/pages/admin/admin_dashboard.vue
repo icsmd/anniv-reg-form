@@ -61,7 +61,7 @@
 
                     </div>
                 </div>
-                <!-- START: UREGISTRANTS LISTTABLE -->
+                <!-- START: REGISTRANTS LIST TABLE -->
                 <div class="panel panel-colorbox-open panel-dark" id="spy2">
                     <div class="panel-heading ">
                         <div class="panel-title hidden-xs">
@@ -161,6 +161,9 @@ export default {
         this.initEventListeners();
     },
     methods: {
+        /**
+         * Initialize plugins
+         */
         initPlugins: function () {
             // Initialize datepicker for start date
             $("#inpStartDate").datepicker({
@@ -176,7 +179,7 @@ export default {
                     }
                 }
             });
-             // Initialize datepicker for end date
+            // Initialize datepicker for end date
             $("#inpEndDate").datepicker({
                 prevText: '<i class="fa fa-chevron-left"></i>',
                 nextText: '<i class="fa fa-chevron-right"></i>',
@@ -190,9 +193,14 @@ export default {
                     }
                 }
             });
+            /** Preload date now for initial date */
             $('#inpStartDate').val(moment().format('MM/DD/YYYY'));
             $('#inpEndDate').val(moment().format('MM/DD/YYYY'));
         },
+
+        /**
+         * Initialize event listeners
+         */
         initEventListeners: function () {
             let mSelf = this;
             document.body.addEventListener('click', function (event) {
@@ -200,7 +208,7 @@ export default {
                 if (event.target.dataset.action === 'viewDetails') {
                     let iRegNo = event.target.dataset.id;
                     let aSelectedReg = mSelf.aRecordList.filter(regs => regs.reg_no == iRegNo);
-                    let sCompressed = btoa(JSON.stringify(aSelectedReg));
+                    let sCompressed = JSON.stringify(aSelectedReg);
                     mSelf.$root.setLocalStorageValue('comp', sCompressed);
                     window.location.href = '/admin/registrant/details';
                 }
@@ -216,6 +224,9 @@ export default {
             }, false);
         },
 
+        /**
+         * Create/Build and Download CSV
+         */
         createCsv: function () {
             const titleKeys = [
                 "reg_no",
@@ -253,12 +264,18 @@ export default {
             link.click();
         },
 
+        /**
+         * Print List 
+         */
         printList: function () {
             let sCompressedSummary = JSON.stringify(this.aRecordList);
-            this.$root.setLocalStorageValue('forEx', sCompressedSummary);
+            this.$root.setLocalStorageValue('forEx', sCompressedSummary); // Temporary storage
             window.open('home/print', '_blank');
         },
 
+        /**
+         * Get Record List
+         */
         getRecordList: function () {
             let mSelf = this;
             setTimeout(function () {
@@ -278,6 +295,9 @@ export default {
             }, 500);
         },
 
+        /**
+         * Initialize Table UI
+         */
         initTblRecords: function () {
             $('#tbl_records').DataTable(this.aTableConfig);
             $('.dataTables_filter input').attr("placeholder", "Enter Terms...");

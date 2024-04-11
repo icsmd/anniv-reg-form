@@ -46,6 +46,9 @@ __webpack_require__.r(__webpack_exports__);
     document.title = 'Anniversary Celebration Registration';
   },
   watch: {
+    /**
+     * Checks the live changes of sEmailValidStat value
+     */
     sEmailValidStat: function sEmailValidStat(sValid) {
       if (sValid === 'valid') {
         $('#div_main_form').css('display', '');
@@ -62,12 +65,18 @@ __webpack_require__.r(__webpack_exports__);
     this.initEventListeners();
   },
   methods: {
+    /**
+     * Get Membership Type List
+     */
     getMstList: function getMstList() {
       var _this = this;
       this.getRequest('get-mst', function (mResponse) {
         _this.aMstList = mResponse.data;
       });
     },
+    /**
+     * Initialize event listeners
+     */
     initEventListeners: function initEventListeners() {
       var mSelf = this;
       document.body.addEventListener('click', function (event) {
@@ -82,6 +91,8 @@ __webpack_require__.r(__webpack_exports__);
           mSelf.submitForm();
         }
       }, false);
+
+      // Email Revalidation
       $(this.sInpEmail).keyup(function (event) {
         event.preventDefault();
         if (mSelf.sEmailValidStat === 'valid') {
@@ -104,6 +115,9 @@ __webpack_require__.r(__webpack_exports__);
         }
       });
     },
+    /**
+     * Image upload
+     */
     getImageUpload: function getImageUpload() {
       var mSelf = this;
       var oInput = document.createElement('input');
@@ -136,6 +150,9 @@ __webpack_require__.r(__webpack_exports__);
       };
       oInput.click();
     },
+    /**
+     * Validate image
+     */
     validateImage: function validateImage(oFile) {
       var fFileSizeMb = oFile.size / (1024 * 1024);
       var sFileType = oFile.type;
@@ -158,6 +175,9 @@ __webpack_require__.r(__webpack_exports__);
         sMessage: sMessage
       };
     },
+    /**
+     * Validate Email
+     */
     validateEmail: function validateEmail() {
       var _this2 = this;
       var sEmail = $(this.sInpEmail).val();
@@ -187,6 +207,9 @@ __webpack_require__.r(__webpack_exports__);
         }
       }
     },
+    /**
+     * Validate registration form (Null values)
+     */
     validateForm: function validateForm() {
       var mSelf = this;
       var aInputFields = [this.sInpSalute, this.sInpFname, this.sInpMInitial, this.sInpLname, this.sInpDept, this.sInpDesig, this.sInpMst, this.sInpContact, this.sInpPicturePreview, this.sInpIdCode];
@@ -211,6 +234,9 @@ __webpack_require__.r(__webpack_exports__);
         return str.includes('false');
       });
     },
+    /**
+     * Validate registration form (Other value attributes)
+     */
     validateFormByValue: function validateFormByValue() {
       var aValidationResults = [];
       if ($(this.sInpContact).val().length != 11) {
@@ -231,6 +257,9 @@ __webpack_require__.r(__webpack_exports__);
         return str.includes('false');
       });
     },
+    /**
+     * Submit registration form
+     */
     submitForm: function submitForm() {
       var _this3 = this;
       var bFormNotValid = this.validateForm();

@@ -5,6 +5,12 @@ namespace App\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * Class   : RegistrationApiResource
+ * Author  : C.O.B
+ * Dated   : 04/11/24
+ * Version : 1.0
+ */
 class RegistrationApiResource extends JsonResource
 {
     /**

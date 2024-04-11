@@ -7,7 +7,6 @@ import HttpRequest from './libraries/request.js'
 import C_Layout_Header from './components/layouts/header.vue'
 import C_Layout_ADMIN_Sidebar from './components/layouts/admin/admin_sidebar.vue'
 
-import C_WebDevInProgress from './components/pages/WebDevInProgress.vue'
 
 // Define route components (import components).
 const C_Login = import('./components/pages/login.vue')
@@ -368,54 +367,63 @@ const app = createApp({
       });
     },
     
+    /**
+     * Get user info from session
+     */
     getUserInfo: function () {
       this.getRequest('user/session', (mResponse) => {
         this.aUserInfo = mResponse.data;
       });
     },
 
+    /** 
+     * Get user type from temp storage
+     */
     getUserType: function () {
       return atob(this.getLocalStorageValue('amho'));
     },
 
+    /**
+     * Get local storage value
+     * @param {*} key 
+     * @returns 
+     */
     getLocalStorageValue: function (key) {
       return localStorage.getItem(key);
     },
 
-    // Create or update a value in Local Storage
+    /**
+     * Create or update a value in Local Storage
+     * @param {*} key 
+     * @param {*} value 
+     */
     setLocalStorageValue: function (key, value) {
       localStorage.setItem(key, value);
     },
 
+    /**
+     * Delete a value in Local Storage
+     * @param {*} key 
+     */
     deleteLocalStorageValue: function (key) {
       localStorage.removeItem(key);
     },
 
+    /**
+     * Delete all values in Local Storage
+     */
     clearLocalStorage: function () {
       localStorage.clear();
     },
 
-    initLibraries: function () {
-      let aUrl = {
-        sdor: 'cache/init-sdor-lib',
-        actg: 'cache/init-actg-lib',
-        bdgt: 'cache/init-bdgt-lib',
-        cash: 'cache/init-cash-lib',
-      }
-      this.getRequest(aUrl[this.sUserType], (mResponse) => {
-        this.setLocalStorageValue('lib', mResponse.data);
-      });
-    },
-
+    /**
+     * Parse local storage library
+     * @returns 
+     */
     parseLocalStorageLib: function () {
       let sLibData = this.getLocalStorageValue('lib');
-      // if (sLibData === null) {
-      //   this.initLibraries();
-      // }
       return JSON.parse(atob(sLibData));
     },
-
-
   }
 })
 
@@ -423,7 +431,6 @@ const app = createApp({
 app
   .component('C_Layout_Header', C_Layout_Header)
   .component('C_Layout_ADMIN_Sidebar', C_Layout_ADMIN_Sidebar)
-  .component('C_WebDevInProgress', C_WebDevInProgress)
 
 // Use the router instance
 app.use(router)

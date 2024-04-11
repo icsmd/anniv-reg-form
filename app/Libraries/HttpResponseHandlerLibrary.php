@@ -1,52 +1,49 @@
 <?php
 
 namespace App\Libraries;
-use Illuminate\Http\Response;
 
+use Symfony\Component\HttpFoundation\Response;
+use App\Libraries\AppConstantsLibrary as AppConst;
 
 /**
- * Class: HttpResponseHandlerLibrary
- * Namespace: App\Libraries
- * Author: Cristian Balatbat
- * Created: 01/16/2024
- * Version: 1.0
+ * Class   : HttpResponseHandlerLibrary
+ * Author  : C.O.B
+ * Dated   : 04/11/24
+ * Version : 1.0
  */
 class HttpResponseHandlerLibrary
 {
-    const CODE = "code";
-    const MESSAGE = "message";
-    const DATA = "data";
 
     /**
      * Formats success responses
      * 
-     * param string $sMessage
-     * param mixed  $mData
-     * param int    $iCode
-     * return array
+     * @param string $sMessage
+     * @param mixed  $mData
+     * @param int    $iCode
+     * @return mixed
      */
     public static function formatSuccessResponse($sMessage, $mData, $iCode = Response::HTTP_OK)
     {
         return response()->json([
-            self::CODE    => $iCode,
-            self::MESSAGE => $sMessage,
-            self::DATA    => $mData,
+            AppConst::CODE    => $iCode,
+            AppConst::MESSAGE => $sMessage,
+            AppConst::DATA    => $mData,
         ])->setStatusCode($iCode);
     }
 
     /**
      * Formats error responses
      * 
-     * param \Throwable $oException
-     * return array
+     * @param \Throwable
+     * @return mixed
      */
     public static function formatErrorResponse(\Throwable $oException)
     {
         $iErrCode = empty($oException->getCode()) ? Response::HTTP_INTERNAL_SERVER_ERROR : $oException->getCode();
         return response()->json([
-            self::CODE    => $iErrCode,
-            self::MESSAGE => $oException->getMessage(),
-            self::DATA    => null,
+            AppConst::CODE    => $iErrCode,
+            AppConst::MESSAGE => $oException->getMessage(),
+            AppConst::DATA    => null,
         ])->setStatusCode(500);
     }
 }

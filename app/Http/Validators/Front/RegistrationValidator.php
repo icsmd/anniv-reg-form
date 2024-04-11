@@ -2,9 +2,19 @@
 
 namespace App\Http\Validators\Front;
 
-
+/**
+ * Class   : RegistrationValidator
+ * Author  : C.O.B
+ * Dated   : 04/11/24
+ * Version : 1.0
+ */
 class RegistrationValidator
 {
+    /**
+     * Validates the fields for saving registration details
+     * Rules: (Varies depending on the field) 
+     * @param $request
+     */
     public static function validate($request)
     {
         $request->validate([

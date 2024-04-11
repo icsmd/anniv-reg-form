@@ -7,19 +7,35 @@ use App\Libraries\HttpResponseHandlerLibrary as Response;
 use App\Models\RegistrationModel;
 use App\Repositories\RegistrationRepository;
 
+/**
+ * Class   : RegistrationApiController
+ * Author  : C.O.B
+ * Dated   : 04/11/24
+ * Version : 1.0
+ */
 class RegistrationApiController extends Controller
 {
+    /** Constant for retrieve message */
     const SUCCESS_RETRIEVE_MSG = "Successfully retrieved registration(s)";
+
+    /** Holds the instance of registration repository class */
     private $oRegistrationRepository;
 
+    /** Holds the instance of the model instantiated (General) */
     private $oModel;
 
+    /** Class' constructor */
     public function __construct()
     {
         $this->oRegistrationRepository = new RegistrationRepository();
         $this->oModel = new RegistrationModel();
     }
 
+    /**
+     * Retrieves all registrants
+     * @return mixed|array
+     * @throws \Throwable
+     */
     public function getAllRegistration()
     {
         try {
@@ -31,6 +47,11 @@ class RegistrationApiController extends Controller
         }
     }
 
+    /**
+     * Create a registrant record
+     * @return mixed|array
+     * @throws \Throwable
+     */
     public function createRegistration()
     {
         try {
@@ -42,6 +63,11 @@ class RegistrationApiController extends Controller
         }
     }
 
+    /**
+     * Updates registrant's detail record
+     * @return mixed|array
+     * @throws \Throwable
+     */
     public function updateRegistration($iId)
     {
         try {

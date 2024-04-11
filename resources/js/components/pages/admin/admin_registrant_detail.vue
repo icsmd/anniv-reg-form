@@ -13,8 +13,7 @@
                 <span class="panel-title">Manage Registrants > Details</span>
             </div>
             <div class="panel-body">
-
-                <!-- START: UACS TABLE -->
+                <!-- START: REGISTRANT's DETAILS -->
                 <div class="panel panel-colorbox-open panel-dark" id="spy2">
                     <br>
                     <div class="panel-heading ">
@@ -71,12 +70,11 @@
                                     </tr>
                                 </tbody>
                             </table>
-
                             <br>
                         </div>
                     </div>
                 </div>
-                <!-- END: UACS TABLE -->
+                <!-- END: REGISTRANT's DETAILS -->
             </div>
         </div>
     </section>
@@ -88,7 +86,7 @@ export default {
             aRegistrant: []
         }
     },
-    created () {
+    created() {
         document.title = 'RFM | Registrant Detail'
     },
     mounted() {
@@ -96,6 +94,9 @@ export default {
         this.parseDetails();
     },
     methods: {
+        /**
+         * Initialize event listeners
+         */
         initEventListeners: function () {
             document.body.addEventListener('click', function (event) {
                 event.preventDefault();
@@ -104,8 +105,12 @@ export default {
                 }
             }, false);
         },
+
+        /**
+         * Parse details (From the temporary storage)
+         */
         parseDetails: function () {
-            this.aRegistrant = JSON.parse(atob(this.$root.getLocalStorageValue('comp')))[0];
+            this.aRegistrant = JSON.parse(this.$root.getLocalStorageValue('comp'))[0];
         },
     }
 }

@@ -326,6 +326,9 @@ export default {
     document.title = 'Anniversary Celebration Registration'
   },
   watch: {
+    /**
+     * Checks the live changes of sEmailValidStat value
+     */
     sEmailValidStat(sValid) {
       if (sValid === 'valid') {
         $('#div_main_form').css('display', '');
@@ -342,12 +345,19 @@ export default {
     this.initEventListeners();
   },
   methods: {
+    
+    /**
+     * Get Membership Type List
+     */
     getMstList: function () {
       this.getRequest('get-mst', (mResponse) => {
         this.aMstList = mResponse.data;
       });
     },
 
+    /**
+     * Initialize event listeners
+     */
     initEventListeners: function () {
       let mSelf = this;
       document.body.addEventListener('click', function (event) {
@@ -363,7 +373,7 @@ export default {
         }
       }, false);
 
-
+      // Email Revalidation
       $(this.sInpEmail).keyup(function (event) {
         event.preventDefault();
         if (mSelf.sEmailValidStat === 'valid') {
@@ -387,6 +397,9 @@ export default {
       });
     },
 
+    /**
+     * Image upload
+     */
     getImageUpload: function () {
       let mSelf = this;
       var oInput = document.createElement('input');
@@ -420,6 +433,9 @@ export default {
       oInput.click();
     },
 
+    /**
+     * Validate image
+     */
     validateImage: function (oFile) {
       let fFileSizeMb = oFile.size / (1024 * 1024);
       let sFileType = oFile.type;
@@ -441,6 +457,9 @@ export default {
       }
     },
 
+    /**
+     * Validate Email
+     */
     validateEmail: function () {
       let sEmail = $(this.sInpEmail).val();
       if (this.sTempEmailValue !== '' && this.sEmail === this.sTempEmailValue) {
@@ -468,6 +487,9 @@ export default {
       }
     },
 
+    /**
+     * Validate registration form (Null values)
+     */
     validateForm: function () {
       let mSelf = this;
       let aInputFields = [
@@ -500,12 +522,12 @@ export default {
         }
       });
 
-
-
-
       return aValidationResults.some(str => str.includes('false'));
     },
 
+    /**
+     * Validate registration form (Other value attributes)
+     */
     validateFormByValue: function () {
       let aValidationResults = [];
       if ($(this.sInpContact).val().length != 11) {
@@ -527,6 +549,9 @@ export default {
       return aValidationResults.some(str => str.includes('false'));
     },
 
+    /**
+     * Submit registration form
+     */
     submitForm: function () {
       let bFormNotValid = this.validateForm();
       let bFormValueNotValid = this.validateFormByValue();

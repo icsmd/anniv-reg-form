@@ -28,10 +28,16 @@ __webpack_require__.r(__webpack_exports__);
     this.printReport();
   },
   methods: {
+    /**
+     * Parse compressed data from temp storage
+     */
     parseCompressedData: function parseCompressedData() {
       var sCompressedData = this.$root.getLocalStorageValue('forEx');
       this.aRecordList = JSON.parse(sCompressedData);
     },
+    /**
+     * Print report
+     */
     printReport: function printReport() {
       var printContents = document.getElementById('printableDiv').outerHTML;
       var originalContents = document.body.innerHTML;

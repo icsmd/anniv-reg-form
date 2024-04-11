@@ -8,8 +8,6 @@
                 <!-- Sidebar Widget - Author -->
                 <div class="sidebar-widget author-widget">
                     <div class="media">
-                        <!-- IMG of USER (FOR REPLACEMENT)-->
-                        
                         <a class="media-left">
                            <img src="../../../../img/user-profile.jpg" />
                         </a>
@@ -27,7 +25,6 @@
             <!-- Start: Sidebar Menu -->
             <ul class="nav sidebar-menu">
                 <li class="sidebar-label pt20">Menu</li>
-               
                 <li class="active" data-comp="sidebar" :data-href="sHrefHome">
                     <a href="/front/sdor/home" data-comp="sidebar" :data-href="sHrefHome">
                         <span class="fa fa-group" data-comp="sidebar" :data-href="sHrefHome"></span>
@@ -63,8 +60,10 @@ export default {
         this.initSidebarNav();
     },
     methods: {
+        /**
+         * Initialize sidebar action listeners
+         */
         initSidebarNav: function () {
-            // Event listener for page redirect
             let mSelf = this;
             document.body.addEventListener('click', function (event) {
                 event.preventDefault();
@@ -77,6 +76,9 @@ export default {
             }, false);
         },
 
+        /**
+         * Logout function
+         */
         logout: function () {
             let mSelf = this;
             Swal.fire({
