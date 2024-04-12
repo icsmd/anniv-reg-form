@@ -29,7 +29,6 @@ __webpack_require__.r(__webpack_exports__);
   mounted: function mounted() {
     this.$root.clearLocalStorage();
     this.initializeActions();
-    this.loadfile();
   },
   methods: {
     /**
@@ -55,19 +54,6 @@ __webpack_require__.r(__webpack_exports__);
       this.postRequest('auth/log-in', oParams, function (mResponse) {
         _this.$root.setLocalStorageValue('amho', btoa(mResponse.data.amho));
         window.location.href = mResponse.data.href;
-      });
-    },
-    loadfile: function loadfile() {
-      fetch('http://scms-dev.com/getKey').then(function (response) {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.text();
-      }).then(function (text) {
-        // Process the text content here
-        console.log(text);
-      })["catch"](function (error) {
-        console.error('There was a problem with the fetch operation:', error);
       });
     }
   }

@@ -30,7 +30,6 @@ Route::post('validate-email', [ RegistrationFrontController::class, 'validateEma
 Route::post('submit-form', [ RegistrationFrontController::class, 'saveRegistration' ]);
 
 Route::post('auth/log-in', [ AuthFrontController::class, 'login' ]);
-Route::get('auth/check-id', [ AuthFrontController::class, 'checkAppId' ]);
 Route::middleware(['session.check'])->group(function () {
     Route::get('admin/{any?}', function () {
         return view('main');

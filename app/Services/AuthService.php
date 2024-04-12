@@ -16,8 +16,7 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class AuthService
 {
-    const STATIC_ID_DIRECTORY = "C:\arfm\arfm.appId";
-
+    
     /** Holds the instance of user account model */
     protected $oUserAccountModel;
 
@@ -94,38 +93,5 @@ class AuthService
             "username" => $aUserData['username'],
             "agency"   => $aUserData['agency'],
         ]);
-    }
-
-    /** 
-     * Process:
-     * 1. Generate random string
-     * 2. encrpyt using crpyt
-     * 3. Encode to base64
-     * 
-     */
-    public function authenticateAppId()
-    {
-        $sAppIdFromEnv = config('app.id');
-        $sFileContent = file_get_contents(self::STATIC_ID_DIRECTORY); 
-        $sReverted = base64_decode($sFileContent);
-        $sDecrypted = Crypt::decrypt($sReverted);
-        if ($sDecrypted === $sAppIdFromEnv) {
-            return [
-                Constants::CODE => Response::HTTP_OK,
-                Constants::DATA => true,
-                Constants::MESSAGE => 'App Id is Valid'
-            ];
-        } else {
-            return [
-                Constants::CODE => Response::HTTP_UNAUTHORIZED,
-                Constants::DATA => false,
-                Constants::MESSAGE => 'App Id is Invalid'
-            ];
-        }
-        // Process to create app id to file
-        // $aVar = '0NQTWExAXRnUynFgaGlRQ7A7IL4MNnxM';
-        // $sEncrypted = Crypt::encrypt($aVar);
-        // $sEncoded = base64_encode($sEncrypted);
-        // dd($sEncoded);
     }
 }

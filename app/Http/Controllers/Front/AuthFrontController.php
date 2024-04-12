@@ -72,18 +72,4 @@ class AuthFrontController extends Controller
         session()->flush();
         return redirect('/');
     }
-
-    /**
-     * Check App Id Authenticity
-     * @return mixed
-     */
-    public function checkAppId()
-    {
-        try {
-            $aResult = $this->oAuthService->authenticateAppId();
-            return Response::formatSuccessResponse($aResult['message'], $aResult['data'], $aResult['code']);
-        } catch (\Throwable $oException) {
-            return Response::formatSuccessResponse('Fail to check app id; check your app logs', false, HttpResponse::HTTP_INTERNAL_SERVER_ERROR);
-        }
-    }
 }

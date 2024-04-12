@@ -86,7 +86,6 @@ export default {
   mounted() {
     this.$root.clearLocalStorage();
     this.initializeActions();
-    this.loadfile();
   },
   methods: {
 
@@ -115,23 +114,6 @@ export default {
         this.$root.setLocalStorageValue('amho', btoa(mResponse.data.amho));
         window.location.href = mResponse.data.href;
       });
-    },
-
-    loadfile: function () {
-      fetch('http://scms-dev.com/getKey')
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
-          }
-          return response.text();
-        })
-        .then(text => {
-          // Process the text content here
-          console.log(text);
-        })
-        .catch(error => {
-          console.error('There was a problem with the fetch operation:', error);
-        });
     }
   }
 }
