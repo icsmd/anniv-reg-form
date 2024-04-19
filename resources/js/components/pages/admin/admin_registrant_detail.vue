@@ -61,10 +61,6 @@
                                         <td>{{ aRegistrant.contact_number }}</td>
                                     </tr>
                                     <tr>
-                                        <td width="30%" style="background-color: #eee;">Type:</td>
-                                        <td>{{ aRegistrant.guest_of }}</td>
-                                    </tr>
-                                    <tr>
                                         <td width="30%" style="background-color: #eee;">Submitted ID Code:</td>
                                         <td>{{ aRegistrant.id_code}}</td>
                                     </tr>

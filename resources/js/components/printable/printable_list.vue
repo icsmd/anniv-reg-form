@@ -15,7 +15,6 @@
                     <th style="text-align: center;border: 1px solid black !important;">Membership</th>
                     <th style="text-align: center;border: 1px solid black !important;">Email</th>
                     <th style="text-align: center;border: 1px solid black !important;">Contact No.</th>
-                    <th style="text-align: center;border: 1px solid black !important;">Type</th>
                     <th style="text-align: center;border: 1px solid black !important;">ID Code</th>
                 </tr>
             </thead>
@@ -29,9 +28,7 @@
                     <td style="text-align: left;"><p class="p-inside-table">{{ item.membership }}</p></td>
                     <td style="text-align: left;"><p class="p-inside-table">{{ item.email }}</p></td>
                     <td style="text-align: left;"><p class="p-inside-table">{{ item.contact_number }}</p></td>
-                    <td style="text-align: left;"><p class="p-inside-table">{{ item.guest_of }}</p></td>
                     <td style="text-align: left;"><p class="p-inside-table">{{ item.id_code }}</p></td>
-
                 </tr>
             </tbody>
         </table>

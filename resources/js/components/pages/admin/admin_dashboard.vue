@@ -79,7 +79,6 @@
                                     <th style="text-align: center;">Department/Agency</th>
                                     <th style="text-align: center;">Email</th>
                                     <th style="text-align: center;">Contact No.</th>
-                                    <th style="text-align: center;">Type</th>
                                     <th style="text-align: center;">ID Code</th>
                                     <th style="text-align: center;">Action</th>
                                 </tr>
@@ -93,7 +92,6 @@
                                     <td style="text-align: left;">{{ item.department }}</td>
                                     <td style="text-align: left;">{{ item.email }}</td>
                                     <td style="text-align: center;">{{ item.contact_number }}</td>
-                                    <td style="text-align: center;">{{ item.guest_of }}</td>
                                     <td style="text-align: center;">{{ item.id_code }}</td>
                                     <td style="text-align: center;">
                                         <button type="button" data-action="viewDetails" :data-id="item.reg_no"
@@ -129,7 +127,7 @@ export default {
                 ],
                 "aoColumnDefs": [{
                     'bSortable': false,
-                    'aTargets': [9]
+                    'aTargets': [8]
                 }],
                 "oLanguage": {
                     "oPaginate": {
@@ -238,7 +236,6 @@ export default {
                 "department",
                 "designation",
                 "membership",
-                "guest_of",
                 "contact_number",
                 "file_type",
                 "picture",

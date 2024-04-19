@@ -30,7 +30,6 @@ class RegistrationApiResource extends JsonResource
             'department'     => $this->department,
             'designation'    => $this->designation,
             'membership'     => $this->membershipType->mst_desc,
-            'guest_of'       => $this->membershipType->mst_identifier,
             'contact_number' => $this->contact_number,
             'picture'        => $this->picture,
             'id_code'        => $this->id_code,
