@@ -43,8 +43,7 @@
                                 </label>
                             </div>
                         </div>
-                        <button id="btnFilterList" class="button btn-lg btn-system"
-                            style="margin: 10px; margin-top: 16px;">
+                        <button id="btnFilterList" class="button btn-lg btn-system" style="margin: 10px; margin-top: 16px;">
                             <i class="fa fa-refresh"></i>
                             &nbsp;Filter List
                         </button>
@@ -53,8 +52,7 @@
                             <i class="fa fa-download"></i>
                             &nbsp;Export Data
                         </button>
-                        <button id="btnPrintList" class="button btn-lg btn-success"
-                            style="margin: 10px; margin-top: 16px;">
+                        <button id="btnPrintList" class="button btn-lg btn-success" style="margin: 10px; margin-top: 16px;">
                             <i class="fa fa-file-pdf-o"></i>
                             &nbsp;Print List
                         </button>
@@ -112,8 +110,10 @@
 </template>
 <script>
 import moment from "moment";
+import Swal from 'sweetalert2'
 import HttpRequest from "./../../../libraries/request"
 import Utilities from "./../../../libraries/utilities"
+import { reduce } from "highcharts";
 export default {
     mixins: [
         HttpRequest,
@@ -146,6 +146,7 @@ export default {
                 }
             },
             aRecordList: [],
+            aRegistrant: [],
             iActiveRecord: 0,
             bUpdateData: false
         }
@@ -192,7 +193,7 @@ export default {
                 }
             });
             /** Preload date now for initial date */
-            $('#inpStartDate').val(moment().format('MM/DD/YYYY'));
+            $('#inpStartDate').val('06/01/2024');
             $('#inpEndDate').val(moment().format('MM/DD/YYYY'));
         },
 
@@ -208,7 +209,9 @@ export default {
                     let aSelectedReg = mSelf.aRecordList.filter(regs => regs.reg_no == iRegNo);
                     let sCompressed = JSON.stringify(aSelectedReg);
                     mSelf.$root.setLocalStorageValue('comp', sCompressed);
-                    window.location.href = '/admin/registrant/details';
+                    mSelf.showDetails();
+
+                    // window.location.href = '/admin/registrant/details';
                 }
                 if (event.target.id === 'btnFilterList') {
                     mSelf.getRecordList();
@@ -237,8 +240,8 @@ export default {
                 "designation",
                 "membership",
                 "contact_number",
-                "file_type",
-                "picture",
+                // "file_type",
+                // "picture",
                 "id_code",
                 "status",
                 "date_created",
@@ -246,12 +249,14 @@ export default {
             const refinedData = [];
             refinedData.push(titleKeys);
             this.aRecordList.forEach(item => {
+                delete item.picture;
                 refinedData.push(Object.values(item))
             });
             let csvContent = ''
             refinedData.forEach(row => {
                 csvContent += row.join(',') + '\n'
             });
+
             const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8,' })
             const objUrl = URL.createObjectURL(blob)
             const link = document.createElement('a')
@@ -299,6 +304,66 @@ export default {
             $('#tbl_records').DataTable(this.aTableConfig);
             $('.dataTables_filter input').attr("placeholder", "Enter Terms...");
         },
+
+        showDetails: function () {
+            let mSelf = this;
+            this.aRegistrant = JSON.parse(this.$root.getLocalStorageValue('comp'))[0];
+            Swal.fire({
+                title: "<strong>Registrant Details</strong>",
+                html: `
+                <div class="panel-body pn">
+                        <div class="col-md-4">
+                            <img src="`+ mSelf.aRegistrant.picture +`" width="200px" height="200px">
+                        </div>
+                        <div class="col-md-8">
+                            <table style="color: #666666; font-size: 15px; border: 1px solid #eeeeee; margin-top: 2%;"
+                                class="table table-bordered">
+                                <tbody>
+                                    <tr>
+                                        <td width="30%" style="background-color: #eee; text-align: left">Name: </td>
+                                        <td style="text-align: left">` + mSelf.aRegistrant.salutation + ` ` + mSelf.aRegistrant.first_name + ` ` +
+                                mSelf.aRegistrant.middle_initial + ` ` + mSelf.aRegistrant.last_name + `</td>
+                                    </tr>
+                                    <tr>
+                                        <td width="35%" style="background-color: #eee; text-align: left">Department/Agency:<br>
+                                            Office/Company: </td>
+                                        <td style="text-align: left">` + mSelf.aRegistrant.department + `</td>
+                                    </tr>
+                                    <tr>
+                                        <td width="35%" style="background-color: #eee; text-align: left">Designation/Position:</td>
+                                        <td style="text-align: left">` + mSelf.aRegistrant.designation + `</td>
+                                    </tr>
+                                    <tr>
+                                        <td width="35%" style="background-color: #eee; text-align: left">Registered As: <br>(Membership
+                                            Type)</td>
+                                        <td style="text-align: left">` + mSelf.aRegistrant.membership + `</td>
+                                    </tr>
+                                    <tr>
+                                        <td width="35%" style="background-color: #eee; text-align: left">Email:</td>
+                                        <td style="text-align: left">` + mSelf.aRegistrant.email + `</td>
+                                    </tr>
+                                    <tr>
+                                        <td width="35%" style="background-color: #eee; text-align: left">Contact No.:</td>
+                                        <td style="text-align: left">` + mSelf.aRegistrant.contact_number + `</td>
+                                    </tr>
+                                    <tr>
+                                        <td width="35%" style="background-color: #eee; text-align: left">Submitted ID Code:</td>
+                                        <td style="text-align: left">` + mSelf.aRegistrant.id_code + `</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <br>
+                        </div>
+                    </div>
+                `,
+                width: 800,
+                showCloseButton: true,
+                showConfirmButton: false,
+                showCancelButton: true,
+                focusConfirm: false,
+                cancelButtonText: ` <i class="fa fa-times"></i> Close `,
+            });
+        }
     }
 }
 </script>
