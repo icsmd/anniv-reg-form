@@ -254,7 +254,7 @@ export default {
             });
             let csvContent = ''
             refinedData.forEach(row => {
-                csvContent += row.join(',') + '\n'
+                csvContent += row.join(';') + '\n' // Delimiter
             });
 
             const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8,' })

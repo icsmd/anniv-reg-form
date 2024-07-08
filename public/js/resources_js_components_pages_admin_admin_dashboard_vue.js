@@ -143,7 +143,7 @@ __webpack_require__.r(__webpack_exports__);
       });
       var csvContent = '';
       refinedData.forEach(function (row) {
-        csvContent += row.join(',') + '\n';
+        csvContent += row.join(';') + '\n'; // Delimiter
       });
       var blob = new Blob([csvContent], {
         type: 'text/csv;charset=utf-8,'
