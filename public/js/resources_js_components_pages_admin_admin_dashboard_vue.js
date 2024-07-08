@@ -107,13 +107,15 @@ __webpack_require__.r(__webpack_exports__);
         event.preventDefault();
         if (event.target.dataset.action === 'viewDetails') {
           var iRegNo = event.target.dataset.id;
-          var aSelectedReg = mSelf.aRecordList.filter(function (regs) {
-            return regs.reg_no == iRegNo;
+          // Optimized data retrieval
+          mSelf.getRequest('get-reg-details/' + iRegNo, function (mResponse) {
+            var aData = mResponse.data;
+            var sCompressed = JSON.stringify(aData);
+            mSelf.$root.setLocalStorageValue('comp', sCompressed);
+            mSelf.showDetails();
           });
-          var sCompressed = JSON.stringify(aSelectedReg);
-          mSelf.$root.setLocalStorageValue('comp', sCompressed);
-          mSelf.showDetails();
 
+          // let aSelectedReg = mSelf.aRecordList.filter(regs => regs.reg_no == iRegNo);
           // window.location.href = '/admin/registrant/details';
         }
         if (event.target.id === 'btnFilterList') {

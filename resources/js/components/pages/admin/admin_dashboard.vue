@@ -206,11 +206,15 @@ export default {
                 event.preventDefault();
                 if (event.target.dataset.action === 'viewDetails') {
                     let iRegNo = event.target.dataset.id;
-                    let aSelectedReg = mSelf.aRecordList.filter(regs => regs.reg_no == iRegNo);
-                    let sCompressed = JSON.stringify(aSelectedReg);
-                    mSelf.$root.setLocalStorageValue('comp', sCompressed);
-                    mSelf.showDetails();
+                    // Optimized data retrieval
+                    mSelf.getRequest('get-reg-details/'+iRegNo, (mResponse) => {
+                        let aData = mResponse.data;
+                        let sCompressed = JSON.stringify(aData);
+                        mSelf.$root.setLocalStorageValue('comp', sCompressed);
+                        mSelf.showDetails();
+                    });
 
+                    // let aSelectedReg = mSelf.aRecordList.filter(regs => regs.reg_no == iRegNo);
                     // window.location.href = '/admin/registrant/details';
                 }
                 if (event.target.id === 'btnFilterList') {

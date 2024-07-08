@@ -36,7 +36,21 @@ class RegistrationService
     public function getRegistrationList($sStartDate, $sEndDate)
     {
         $oRegistrationModel = new RegistrationModel();
-        $aResult = RegistrationApiResource::collection($oRegistrationModel::whereDate('date_created', '>=', $sStartDate)
+        $aResult = RegistrationApiResource::collection($oRegistrationModel::select(
+            'reg_no',
+            'first_name',
+            'middle_initial',
+            'last_name',
+            'email',
+            'salutation',
+            'department',
+            'designation',
+            'contact_number',
+            'id_code',
+            'status',
+            'mst_id',
+            'date_created'
+           )->whereDate('date_created', '>=', $sStartDate)
             ->whereDate('date_created', '<=', $sEndDate)
             ->get());
         return [
