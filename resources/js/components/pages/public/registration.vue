@@ -216,7 +216,8 @@
             </div>
             <!-- START: ID CODE INPUT -->
             <div class="row">
-              <label class="col-md-12 custom-label">ID Code: <span class="required">*</span></label>
+              <!-- <label class="col-md-12 custom-label">ID Code: <span class="required">*</span></label> -->
+              <label class="col-md-12 custom-label">ID Code:</label>
               <div class="col-md-12">
                 <div class="col-md-12 custom-margin">
                   <label for="inp_idcode" class="field prepend-icon">
@@ -507,7 +508,7 @@ export default {
       let aValidationResults = [];
       aInputFields.forEach(element => {
         let oInpElement = $(element);
-        if (element !== mSelf.sInpMInitial) {
+        if (element !== mSelf.sInpMInitial || element !== mSelf.sInpIdCode) {
           if (oInpElement.val() === '' || oInpElement.val() === null) {
             oInpElement.css('background-color', '#ffcbcb');
             aValidationResults.push('false');
@@ -538,13 +539,13 @@ export default {
         aValidationResults.push('true');
       }
 
-      if ($(this.sInpIdCode).val().length != 5) {
-        $(this.sInpIdCode).css('background-color', '#ffcbcb');
-        aValidationResults.push('false');
-      } else {
-        $(this.sInpIdCode).css('background-color', '#c3ffd6');
-        aValidationResults.push('true');
-      }
+      // if ($(this.sInpIdCode).val().length != 5) {
+      //   $(this.sInpIdCode).css('background-color', '#ffcbcb');
+      //   aValidationResults.push('false');
+      // } else {
+      //   $(this.sInpIdCode).css('background-color', '#c3ffd6');
+      //   aValidationResults.push('true');
+      // }
 
       return aValidationResults.some(str => str.includes('false'));
     },

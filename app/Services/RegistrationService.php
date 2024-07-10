@@ -70,7 +70,7 @@ class RegistrationService
         $oRegistrationModel = new RegistrationModel();
         return [
             AppConst::CODE    => Response::HTTP_OK,
-            AppConst::DATA    => $oRegistrationModel::where([ 'reg_no' => $iId ])->get()->toArray(),
+            AppConst::DATA    => RegistrationApiResource::collection($oRegistrationModel::where([ 'reg_no' => $iId ])->get()),
             AppConst::MESSAGE => 'Successfully retrieved the registration details'
         ];
     }

@@ -216,7 +216,7 @@ __webpack_require__.r(__webpack_exports__);
       var aValidationResults = [];
       aInputFields.forEach(function (element) {
         var oInpElement = $(element);
-        if (element !== mSelf.sInpMInitial) {
+        if (element !== mSelf.sInpMInitial || element !== mSelf.sInpIdCode) {
           if (oInpElement.val() === '' || oInpElement.val() === null) {
             oInpElement.css('background-color', '#ffcbcb');
             aValidationResults.push('false');
@@ -246,13 +246,15 @@ __webpack_require__.r(__webpack_exports__);
         $(this.sInpContact).css('background-color', '#c3ffd6');
         aValidationResults.push('true');
       }
-      if ($(this.sInpIdCode).val().length != 5) {
-        $(this.sInpIdCode).css('background-color', '#ffcbcb');
-        aValidationResults.push('false');
-      } else {
-        $(this.sInpIdCode).css('background-color', '#c3ffd6');
-        aValidationResults.push('true');
-      }
+
+      // if ($(this.sInpIdCode).val().length != 5) {
+      //   $(this.sInpIdCode).css('background-color', '#ffcbcb');
+      //   aValidationResults.push('false');
+      // } else {
+      //   $(this.sInpIdCode).css('background-color', '#c3ffd6');
+      //   aValidationResults.push('true');
+      // }
+
       return aValidationResults.some(function (str) {
         return str.includes('false');
       });
@@ -418,7 +420,7 @@ var _hoisted_33 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElement
 var _hoisted_34 = ["value"];
 var _hoisted_35 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<div class=\"row\"><label class=\"col-md-12 custom-label\">Contact Number: <span class=\"required\">*</span></label><div class=\"col-md-12\"><div class=\"col-md-12 custom-margin\"><label for=\"inp_contact\" class=\"field prepend-icon\"><input type=\"text\" name=\"inp_contact\" id=\"inp_contact\" class=\"gui-input\" placeholder=\"e.g., 09123456789\" minlength=\"11\" maxlength=\"11\"><b class=\"tooltip tip-left-bottom\"><em>The contact number may be used to contact you for identity confirmation. <br> (Must be a valid 11-digit number) </em></b><label for=\"inp_contact\" class=\"field-icon\"><i class=\"fa fa-mobile\"></i></label></label></div></div></div>", 1);
 var _hoisted_36 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<div class=\"row\"><label class=\"col-md-12 custom-label\">Upload Picture: <span class=\"required\">*</span></label><div class=\"col-md-12\"><div class=\"col-md-12\"><div class=\"section\"><label class=\"field prepend-icon append-button file\"><span class=\"button btn-primary\">Choose File</span><input type=\"file\" class=\"gui-file\" name=\"inp_picture\" id=\"inp_picture\"><input type=\"text\" class=\"gui-input\" id=\"inp_pic_name_preview\" placeholder=\"Please Select A File\"><b class=\"tooltip tip-left-bottom\"><em>The picture you will provide will be used to validate your identification. <br> (Must be a valid jpg, jpeg, and png file) </em></b><label class=\"field-icon\"><i class=\"fa fa-upload\"></i></label></label></div></div></div></div>", 1);
-var _hoisted_37 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<div class=\"row\"><label class=\"col-md-12 custom-label\">ID Code: <span class=\"required\">*</span></label><div class=\"col-md-12\"><div class=\"col-md-12 custom-margin\"><label for=\"inp_idcode\" class=\"field prepend-icon\"><input type=\"text\" name=\"inp_idcode\" id=\"inp_idcode\" class=\"gui-input\" placeholder=\"e.g., 12345\" minlength=\"5\" maxlength=\"5\"><b class=\"tooltip tip-left-bottom\"><em>The ID code comes from invitation that was sent to you via email. <br> (Must be a 5-digit number) </em></b><label for=\"inp_idcode\" class=\"field-icon\"><i class=\"fa fa-code\"></i></label></label></div></div></div>", 1);
+var _hoisted_37 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<div class=\"row\"><!-- &lt;label class=&quot;col-md-12 custom-label&quot;&gt;ID Code: &lt;span class=&quot;required&quot;&gt;*&lt;/span&gt;&lt;/label&gt; --><label class=\"col-md-12 custom-label\">ID Code:</label><div class=\"col-md-12\"><div class=\"col-md-12 custom-margin\"><label for=\"inp_idcode\" class=\"field prepend-icon\"><input type=\"text\" name=\"inp_idcode\" id=\"inp_idcode\" class=\"gui-input\" placeholder=\"e.g., 12345\" minlength=\"5\" maxlength=\"5\"><b class=\"tooltip tip-left-bottom\"><em>The ID code comes from invitation that was sent to you via email. <br> (Must be a 5-digit number) </em></b><label for=\"inp_idcode\" class=\"field-icon\"><i class=\"fa fa-code\"></i></label></label></div></div></div>", 1);
 var _hoisted_38 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<div class=\"panel-footer text-right\" id=\"div_footer_form\" style=\"display:none;\"><button type=\"reset\" id=\"btnClearForm\" class=\"button\"><i class=\"fa fa-undo\"></i>   Clear All </button>   <button id=\"btnSubmitForm\" class=\"button btn-success\"><i class=\"fa fa-send\"></i>   Submit </button></div>", 1);
 var _hoisted_39 = {
   "class": "center-block mt70",
